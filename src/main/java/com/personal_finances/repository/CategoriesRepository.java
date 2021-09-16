@@ -1,9 +1,9 @@
 package com.personal_finances.repository;
 
-import com.personal_finances.model.Expenditure;
+import com.personal_finances.model.Categories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ExpenditureRepository extends JpaRepository<Expenditure, Long> {
+public interface CategoriesRepository extends JpaRepository<Categories, Long> {
 }

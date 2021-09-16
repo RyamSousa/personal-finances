@@ -1,7 +1,8 @@
 package com.personal_finances.model.dto;
 
-import com.personal_finances.model.Account;
-import com.personal_finances.model.Category;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.personal_finances.model.Accounts;
+import com.personal_finances.model.Categories;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,15 +15,16 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RevenueDTO {
+public class ExpendituresDTO {
     private Long id;
     @NotNull
     private Integer value;
     private String description;
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate date;
 
-    private Category category;
+    private Categories category;
     @NotNull
-    private Account account;
+    private Accounts account;
 }

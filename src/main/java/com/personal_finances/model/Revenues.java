@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Revenue {
+public class Revenues {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -19,8 +19,6 @@ public class Revenue {
     private String description;
     private LocalDateTime date;
 
-    @OneToMany
-    private Category category;
-    @OneToMany
-    private Account account;
+    @ManyToOne
+    private Categories category;
 }

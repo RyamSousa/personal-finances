@@ -6,21 +6,19 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Expenditures {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
-    private String cpf;
-    private LocalDateTime birthdate;
+    private Integer value;
+    private String description;
+    private LocalDateTime date;
 
-    @OneToMany
-    private Set<Account> accounts = new HashSet<>();
+    @ManyToOne
+    private Categories category;
 }

@@ -13,18 +13,16 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Account {
+public class Accounts {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Integer balance;
     private LocalDateTime createDate;
 
-    @OneToOne
-    private User userAccount;
-    @ManyToMany
-    private Set<Revenue> revenues = new HashSet<>();
-    @ManyToMany
-    private Set<Expenditure> expenditure = new HashSet<>();
+    @OneToMany
+    private Set<Revenues> revenues = new HashSet<>();
+    @OneToMany
+    private Set<Expenditures> expenditure = new HashSet<>();
 
 }

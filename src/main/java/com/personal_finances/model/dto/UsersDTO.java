@@ -1,28 +1,33 @@
 package com.personal_finances.model.dto;
 
-import com.personal_finances.model.Account;
-import com.personal_finances.model.Category;
+import com.personal_finances.model.Accounts;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExpenditureDTO {
+public class UsersDTO {
     private Long id;
-    @NotNull
-    private Integer value;
-    private String description;
-    @NotNull
-    private LocalDate date;
 
-    private Category category;
     @NotNull
-    private Account account;
+    @Size(min = 1, max = 500)
+    private String name;
+
+    @NotNull
+    private String cpf;
+
+    @NotNull
+    private LocalDate birthdate;
+
+    @NotNull
+    private List<Accounts> accounts;
 }
