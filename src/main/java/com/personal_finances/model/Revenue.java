@@ -10,19 +10,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Revenue {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
-    private String cpf;
-    private LocalDate birthdate;
+    private Integer value;
+    private String description;
+    private LocalDate date;
 
-    private List<Account> accounts;
+    private Category category;
+    private Account account;
 }
