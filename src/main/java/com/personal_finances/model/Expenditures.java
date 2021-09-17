@@ -21,4 +21,7 @@ public class Expenditures {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Categories category;
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Accounts account;
 }

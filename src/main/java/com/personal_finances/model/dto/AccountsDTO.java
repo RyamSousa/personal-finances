@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -22,9 +22,9 @@ public class AccountsDTO {
     private Integer balance;
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate createDate;
+    private LocalDateTime createDate;
     @NotNull
-    private Users userAccount;
+    private Users user;
     private List<Revenues> revenues;
     private List<Expenditures> expenditure;
 }

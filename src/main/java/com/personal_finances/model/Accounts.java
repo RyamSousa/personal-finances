@@ -22,9 +22,9 @@ public class Accounts {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users user;
-    @OneToMany
+    @OneToMany(mappedBy = "account")
     private List<Revenues> revenues = new ArrayList<>();
-    @OneToMany
+    @OneToMany(mappedBy = "account")
     private List<Expenditures> expenditure = new ArrayList<>();
 
 }

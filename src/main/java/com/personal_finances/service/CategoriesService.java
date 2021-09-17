@@ -18,7 +18,7 @@ import java.util.Optional;
 public class CategoriesService {
 
     private final CategoriesRepository repository;
-    private final CategoriesMapper mapper;
+    private final CategoriesMapper mapperCategory;
 
     @Transactional
     public CategoriesDTO save(CategoriesDTO dto){
@@ -28,20 +28,10 @@ public class CategoriesService {
             System.out.println("Lançar exceção");
         }
 
-        Categories category = mapper.toCategories(dto);
+        Categories category = mapperCategory.toCategories(dto);
         repository.save(category);
 
-        return mapper.toDto(category);
-    }
-
-    @Transactional(readOnly = true)
-    public CategoriesDTO findById(Long id){
-        Optional<Categories> optionalCategory = repository.findById(id);
-
-        if (optionalCategory.isEmpty()) {
-            System.out.println("Lançar exceção");
-        }
-        return mapper.optionaltoDto(optionalCategory);
+        return mapperCategory.toDto(category);
     }
 
     @Transactional
@@ -54,7 +44,17 @@ public class CategoriesService {
     }
 
     @Transactional(readOnly = true)
+    public CategoriesDTO findById(Long id){
+        Optional<Categories> optionalCategory = repository.findById(id);
+
+        if (optionalCategory.isEmpty()) {
+            System.out.println("Lançar exceção");
+        }
+        return mapperCategory.optionaltoDto(optionalCategory);
+    }
+
+    @Transactional(readOnly = true)
     public List<CategoriesDTO> findAllCategories(){
-        return mapper.toListDTO(repository.findAll());
+        return mapperCategory.toListDTO(repository.findAll());
     }
 }
