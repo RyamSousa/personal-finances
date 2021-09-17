@@ -3,11 +3,10 @@ package com.personal_finances.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,12 +14,12 @@ import java.util.Set;
 @NoArgsConstructor
 public class Users {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "id_user")
     private Long id;
     private String name;
     private String cpf;
     private LocalDateTime birthdate;
 
-    @OneToMany
-    private Set<Accounts> accounts = new HashSet<>();
+    @OneToMany(mappedBy = "user")
+    private List<Accounts> accounts = new ArrayList<>();
 }

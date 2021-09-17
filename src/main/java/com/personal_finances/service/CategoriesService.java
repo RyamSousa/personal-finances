@@ -4,13 +4,14 @@ import com.personal_finances.mapper.CategoriesMapper;
 import com.personal_finances.model.Categories;
 import com.personal_finances.model.dto.CategoriesDTO;
 import com.personal_finances.repository.CategoriesRepository;
+import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -21,19 +22,39 @@ public class CategoriesService {
 
     @Transactional
     public CategoriesDTO save(CategoriesDTO dto){
-        Optional<Categories> OptionalCategory = repository.findById(dto.getId());
+        Optional<Categories> optionalCategory = repository.findByName(dto.getName());
 
-        if (OptionalCategory.isPresent()){
+        if (optionalCategory.isPresent()){
             System.out.println("Lançar exceção");
         }
 
-        Categories category = mapper.toCategory(dto);
+        Categories category = mapper.toCategories(dto);
         repository.save(category);
 
-        return mapper.toCategoryDTO(category);
+        return mapper.toDto(category);
     }
 
-    public Set<CategoriesDTO> findAllCategories(){
-        return mapper.toListCategories((Set<Categories>) repository.findAll());
+    @Transactional(readOnly = true)
+    public CategoriesDTO findById(Long id){
+        Optional<Categories> optionalCategory = repository.findById(id);
+
+        if (optionalCategory.isEmpty()) {
+            System.out.println("Lançar exceção");
+        }
+        return mapper.optionaltoDto(optionalCategory);
+    }
+
+    @Transactional
+    public CategoriesDTO delete(Long id){
+        CategoriesDTO dto = this.findById(id);
+
+        repository.deleteById(id);
+
+        return dto;
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoriesDTO> findAllCategories(){
+        return mapper.toListDTO(repository.findAll());
     }
 }

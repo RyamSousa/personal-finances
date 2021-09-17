@@ -3,11 +3,9 @@ package com.personal_finances.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,7 +13,12 @@ import javax.persistence.Id;
 @NoArgsConstructor
 public class Categories {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_category")
     private Long id;
     private String name;
+
+    @OneToMany(mappedBy = "category")
+    private List<Expenditures> expenditures = new ArrayList<>();
+    @OneToMany(mappedBy = "category")
+    private List<Revenues> revenues = new ArrayList<>();
 }
