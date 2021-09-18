@@ -17,24 +17,24 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class CategoriesController {
 
-    private final CategoriesService service;
+    private final CategoriesService serviceCategory;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CategoriesDTO> save(@Valid @RequestBody CategoriesDTO dto){
-        return ResponseEntity.ok(service.save(dto));
+        return ResponseEntity.ok(serviceCategory.save(dto));
     }
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CategoriesDTO> findById(@PathVariable Long id){
-        return ResponseEntity.ok(service.findById(id));
+        return ResponseEntity.ok(serviceCategory.findById(id));
     }
 
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CategoriesDTO> delete(@PathVariable Long id){
-        return ResponseEntity.ok(service.delete(id));
+        return ResponseEntity.ok(serviceCategory.delete(id));
     }
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CategoriesDTO>> findAllCategories(){
-        return ResponseEntity.ok(service.findAllCategories());
+        return ResponseEntity.ok(serviceCategory.findAllCategories());
     }
 }

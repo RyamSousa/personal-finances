@@ -36,7 +36,7 @@ public class RevenuesMapper {
         return dto;
     }
 
-    public Revenues toCategories(RevenuesDTO dto) {
+    public Revenues toRevenue(RevenuesDTO dto) {
         Revenues revenues = new Revenues();
 
         revenues.setId(dto.getId());

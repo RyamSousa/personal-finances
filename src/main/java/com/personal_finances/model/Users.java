@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Users {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "id_user")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_user")
     private Long id;
     private String name;
     private String cpf;

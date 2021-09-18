@@ -21,13 +21,10 @@ public class UsersDTO {
     @NotNull
     @Size(min = 1, max = 500)
     private String name;
-
     @NotNull
     private String cpf;
-
     @NotNull
     private LocalDate birthdate;
 
-    @NotNull
     private List<Accounts> accounts;
 }

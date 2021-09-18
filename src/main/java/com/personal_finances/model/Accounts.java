@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Accounts {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "id_account")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_account")
     private Long id;
     private Integer balance;
     private LocalDateTime createDate;

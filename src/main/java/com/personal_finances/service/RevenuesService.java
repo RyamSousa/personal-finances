@@ -1,5 +1,6 @@
 package com.personal_finances.service;
 
+import com.personal_finances.mapper.CategoriesMapper;
 import com.personal_finances.mapper.RevenuesMapper;
 import com.personal_finances.model.Categories;
 import com.personal_finances.model.Revenues;
@@ -21,14 +22,21 @@ public class RevenuesService {
 
     private final RevenuesRepository repository;
     private final RevenuesMapper mapperRevenue;
+    private final CategoriesService categoriesService;
+    private final CategoriesMapper categoriesMapper;
 
     @Transactional
     public RevenuesDTO save(RevenuesDTO dto){
 
-        Revenues category = mapperRevenue.toCategories(dto);
-        repository.save(category);
+        Categories category = categoriesMapper.toCategories(
+                categoriesService.findById(dto.getCategory().getId())
+        );
 
-        return mapperRevenue.toDto(category);
+        dto.setCategory(category);
+        Revenues revenue = mapperRevenue.toRevenue(dto);
+        repository.save(revenue);
+
+        return mapperRevenue.toDto(revenue);
     }
 
     @Transactional
@@ -42,18 +50,18 @@ public class RevenuesService {
 
     @Transactional(readOnly = true)
     public RevenuesDTO findById(Long id){
-        Optional<Revenues> optionalCategory = repository.findById(id);
+        Optional<Revenues> optionalRevenue = repository.findById(id);
 
-        if (optionalCategory.isEmpty()) {
+        if (optionalRevenue.isEmpty()) {
             System.out.println("Lançar exceção");
         }
 
-        return mapperRevenue.optionaltoDto(optionalCategory);
+        return mapperRevenue.optionaltoDto(optionalRevenue);
     }
 
     @Transactional(readOnly = true)
-    public List<RevenuesDTO> findByCategory(String category){
-        List<Optional<Revenues>> optionalRevenue = repository.findByCategory(category);
+    public List<RevenuesDTO> findByCategory(Long id){
+        List<Optional<Revenues>> optionalRevenue = repository.findByCategory(id);
 
         if (optionalRevenue.isEmpty()){
             System.out.println("Lançar exceção");
@@ -66,7 +74,7 @@ public class RevenuesService {
     }
 
     @Transactional(readOnly = true)
-    public List<RevenuesDTO> findAllCategories(){
+    public List<RevenuesDTO> findAllRevenues(){
         return mapperRevenue.toListDTO(repository.findAll());
     }
 

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Expenditures {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "id_expenditure")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_expenditure")
     private Long id;
     private Integer value;
     private String description;

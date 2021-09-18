@@ -16,9 +16,4 @@ public class Categories {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_category")
     private Long id;
     private String name;
-
-    @OneToMany(mappedBy = "category")
-    private List<Expenditures> expenditures = new ArrayList<>();
-    @OneToMany(mappedBy = "category")
-    private List<Revenues> revenues = new ArrayList<>();
 }
