@@ -1,12 +1,12 @@
 package com.personal_finances.service;
 
+import com.personal_finances.mapper.UsersMapper;
 import com.personal_finances.model.Accounts;
-import com.personal_finances.model.Categories;
 import com.personal_finances.model.dto.AccountsDTO;
-import com.personal_finances.model.dto.CategoriesDTO;
+import com.personal_finances.model.dto.UsersDTO;
 import com.personal_finances.repository.AccountsRepository;
 import com.personal_finances.mapper.AccountMapper;
-import com.personal_finances.repository.UsersRepository;
+import com.personal_finances.utils.GetDate;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,21 +20,30 @@ import java.util.Optional;
 public class AccountsService {
 
     private final AccountsRepository repository;
-    private final UsersRepository usersRepository;
     private final AccountMapper accountsMapper;
+    private final UsersService usersService;
+    private final UsersMapper usersMapper;
 
     @Transactional
     public AccountsDTO save(AccountsDTO dto){
-//        Optional<Accounts> optionalAccount = repository.findByAccountNumber(
-//                dto.getAccountNumber(), dto.getUser().getCpf());
-//
-//        dto.getUser() = usersRepository.findById(dto.getId());
-//        if (optionalAccount.isPresent()){
-//            System.out.println("Lançar exceção");
-//        }
+        UsersDTO user = usersService.findByCpf(dto.getUser().getCpf());
+        Accounts account = null;
 
-        Accounts account = accountsMapper.toAccounts(dto);
-        repository.save(account);
+        if(!(user == null)){
+            dto.setUser(usersMapper.toUsers(user));
+            System.out.println("Data: "+GetDate.getDateSystem());
+            dto.setCreateDate(GetDate.getDateSystem());
+            Optional<Accounts> optionalAccount = repository.findByAccountNumber(
+                    dto.getAccountNumber(), dto.getUser().getCpf());
+
+            if (optionalAccount.isPresent()){
+                throw new RuntimeException("Conta já existe");
+            }
+            account = accountsMapper.toAccounts(dto);
+            repository.save(account);
+        }else {
+            throw new RuntimeException("Usuário não existe");
+        }
 
         return accountsMapper.toDto(account);
     }
@@ -59,7 +68,7 @@ public class AccountsService {
     }
 
     @Transactional(readOnly = true)
-    public List<AccountsDTO> findAllCategories(){
+    public List<AccountsDTO> findAllAccounts(){
         return accountsMapper.toListDTO(repository.findAll());
     }
 }

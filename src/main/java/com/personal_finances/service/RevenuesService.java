@@ -4,7 +4,6 @@ import com.personal_finances.mapper.CategoriesMapper;
 import com.personal_finances.mapper.RevenuesMapper;
 import com.personal_finances.model.Categories;
 import com.personal_finances.model.Revenues;
-import com.personal_finances.model.dto.CategoriesDTO;
 import com.personal_finances.model.dto.RevenuesDTO;
 import com.personal_finances.repository.RevenuesRepository;
 import lombok.AllArgsConstructor;

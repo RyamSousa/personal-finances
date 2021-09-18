@@ -22,28 +22,28 @@ public class AccountMapper {
         return dto;
     }
 
-    public AccountsDTO optionaltoDto(Optional<Accounts> accounts) {
+    public AccountsDTO optionaltoDto(Optional<Accounts> account) {
         AccountsDTO dto = new AccountsDTO();
 
-        dto.setId(accounts.get().getId());
-        dto.setAccountNumber(accounts.get().getAccountNumber());
-        dto.setBalance(accounts.get().getBalance());
-        dto.setCreateDate(accounts.get().getCreateDate());
-        dto.setUser(accounts.get().getUser());
+        dto.setId(account.get().getId());
+        dto.setAccountNumber(account.get().getAccountNumber());
+        dto.setBalance(account.get().getBalance());
+        dto.setCreateDate(account.get().getCreateDate());
+        dto.setUser(account.get().getUser());
 
         return dto;
     }
 
     public Accounts toAccounts(AccountsDTO dto) {
-        Accounts accounts = new Accounts();
+        Accounts account = new Accounts();
 
-        accounts.setId(dto.getId());
-        accounts.setAccountNumber(dto.getAccountNumber());
-        accounts.setBalance(dto.getBalance());
-        accounts.setCreateDate(dto.getCreateDate());
-        accounts.setUser(dto.getUser());
+        account.setId(dto.getId());
+        account.setAccountNumber(dto.getAccountNumber());
+        account.setBalance(dto.getBalance());
+        account.setCreateDate(dto.getCreateDate());
+        account.setUser(dto.getUser());
 
-        return accounts;
+        return account;
     }
 
     public List<AccountsDTO> toListDTO(List<Accounts> list) {

@@ -12,8 +12,9 @@ import java.util.Optional;
 @Repository
 public interface ExpendituresRepository extends JpaRepository<Expenditures, Long> {
 
-    Optional<Expenditures> findById(Long id);
     @Query("SELECT ex FROM Expenditures ex " +
             "WHERE ex.category.id = :categoryId")
     List<Optional<Expenditures>> findByCategory(Long categoryId);
+
+    Optional<Expenditures> findById(Long id);
 }

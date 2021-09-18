@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -18,8 +16,5 @@ public class Users {
     private Long id;
     private String name;
     private String cpf;
-    private LocalDateTime birthdate;
-
-    @OneToMany(mappedBy = "user")
-    private List<Accounts> accounts = new ArrayList<>();
+    private LocalDate birthdate;
 }

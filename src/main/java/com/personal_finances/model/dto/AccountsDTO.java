@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -19,9 +19,8 @@ public class AccountsDTO {
     @NotNull
     private Long accountNumber;
     private Double balance;
-    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate createDate;
+    private LocalDateTime createDate;
 
     //@NotNull
     private Users user;

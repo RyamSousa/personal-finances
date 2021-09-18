@@ -11,8 +11,9 @@ import java.util.Optional;
 @Repository
 public interface RevenuesRepository extends JpaRepository<Revenues, Long> {
 
-    Optional<Revenues> findById(Long id);
     @Query("SELECT re FROM Revenues re " +
             "WHERE re.category.id = :categoryId")
     List<Optional<Revenues>> findByCategory(Long categoryId);
+
+    Optional<Revenues> findById(Long id);
 }

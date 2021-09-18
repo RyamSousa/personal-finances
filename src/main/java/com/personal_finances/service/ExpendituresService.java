@@ -77,7 +77,7 @@ public class ExpendituresService {
     }
 
     @Transactional(readOnly = true)
-    public List<ExpendituresDTO> findAllRevenues(){
+    public List<ExpendituresDTO> findAllExpenditures(){
         return mapperExpenditure.toListDTO(repository.findAll());
     }
 

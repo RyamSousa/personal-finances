@@ -3,10 +3,9 @@ package com.personal_finances.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -18,7 +17,7 @@ public class Accounts {
     private Long id;
     private Long accountNumber;
     private Double balance;
-    private LocalDate createDate;
+    private LocalDateTime createDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

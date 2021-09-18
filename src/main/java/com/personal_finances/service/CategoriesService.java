@@ -4,7 +4,6 @@ import com.personal_finances.mapper.CategoriesMapper;
 import com.personal_finances.model.Categories;
 import com.personal_finances.model.dto.CategoriesDTO;
 import com.personal_finances.repository.CategoriesRepository;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

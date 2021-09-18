@@ -42,7 +42,7 @@ public class RevenuesController {
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<RevenuesDTO>> findAllCategories(){
+    public ResponseEntity<List<RevenuesDTO>> findAllRevenues(){
         return ResponseEntity.ok(serviceRevenue.findAllRevenues());
     }
 }

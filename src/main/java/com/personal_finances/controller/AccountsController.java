@@ -37,7 +37,7 @@ public class AccountsController {
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<AccountsDTO>> findAllCategories(){
-        return ResponseEntity.ok(serviceAccounts.findAllCategories());
+    public ResponseEntity<List<AccountsDTO>> findAllAccounts(){
+        return ResponseEntity.ok(serviceAccounts.findAllAccounts());
     }
 }
