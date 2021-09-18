@@ -18,6 +18,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "/revenues")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class RevenuesController {
+
     private final RevenuesService serviceRevenue;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
@@ -39,6 +40,7 @@ public class RevenuesController {
     public ResponseEntity<RevenuesDTO> delete(@PathVariable Long id){
         return ResponseEntity.ok(serviceRevenue.delete(id));
     }
+
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RevenuesDTO>> findAllCategories(){
         return ResponseEntity.ok(serviceRevenue.findAllRevenues());

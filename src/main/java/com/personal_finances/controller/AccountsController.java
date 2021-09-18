@@ -1,41 +1,43 @@
 package com.personal_finances.controller;
 
-import com.personal_finances.model.Categories;
+import com.personal_finances.model.dto.AccountsDTO;
 import com.personal_finances.model.dto.CategoriesDTO;
+import com.personal_finances.service.AccountsService;
 import com.personal_finances.service.CategoriesService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "/categories")
+@RequestMapping(value = "/accounts")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class CategoriesController {
+public class AccountsController {
 
-    private final CategoriesService serviceCategory;
+    private final AccountsService serviceAccounts;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CategoriesDTO> save(@Valid @RequestBody CategoriesDTO dto){
-        return ResponseEntity.ok(serviceCategory.save(dto));
+    public ResponseEntity<AccountsDTO> save(@Valid @RequestBody AccountsDTO dto){
+        return ResponseEntity.ok(serviceAccounts.save(dto));
     }
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CategoriesDTO> findById(@PathVariable Long id){
-        return ResponseEntity.ok(serviceCategory.findById(id));
+    public ResponseEntity<AccountsDTO> findById(@PathVariable Long id){
+        return ResponseEntity.ok(serviceAccounts.findById(id));
     }
 
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CategoriesDTO> delete(@PathVariable Long id){
-        return ResponseEntity.ok(serviceCategory.delete(id));
+    public ResponseEntity<AccountsDTO> delete(@PathVariable Long id){
+        return ResponseEntity.ok(serviceAccounts.delete(id));
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CategoriesDTO>> findAllCategories(){
-        return ResponseEntity.ok(serviceCategory.findAllCategories());
+    public ResponseEntity<List<AccountsDTO>> findAllCategories(){
+        return ResponseEntity.ok(serviceAccounts.findAllCategories());
     }
 }

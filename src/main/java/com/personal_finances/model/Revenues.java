@@ -14,7 +14,7 @@ public class Revenues {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_revenue")
     private Long id;
-    private Integer value;
+    private Double value;
     private String description;
     private LocalDate date;
 

@@ -18,13 +18,14 @@ import java.time.LocalDate;
 public class ExpendituresDTO {
     private Long id;
     @NotNull
-    private Integer value;
+    private Double value;
     private String description;
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate date;
 
-    private Categories category;
     @NotNull
     private Accounts account;
+    private Categories category;
+
 }

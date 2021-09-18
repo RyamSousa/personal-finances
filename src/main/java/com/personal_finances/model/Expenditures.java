@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -14,9 +14,9 @@ public class Expenditures {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_expenditure")
     private Long id;
-    private Integer value;
+    private Double value;
     private String description;
-    private LocalDateTime date;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Component
 public class CategoriesMapper{
+
     public CategoriesDTO toDto(Categories categories) {
         CategoriesDTO dto = new CategoriesDTO();
 
@@ -36,7 +38,6 @@ public class CategoriesMapper{
 
         return categories;
     }
-
 
     public List<CategoriesDTO> toListDTO(List<Categories> list) {
         return list.stream().map(this::toDto).collect(Collectors.toList());

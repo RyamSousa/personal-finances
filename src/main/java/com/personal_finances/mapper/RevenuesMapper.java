@@ -10,45 +10,45 @@ import java.util.stream.Collectors;
 
 @Component
 public class RevenuesMapper {
-    public RevenuesDTO toDto(Revenues revenues) {
+
+    public RevenuesDTO toDto(Revenues revenue) {
         RevenuesDTO dto = new RevenuesDTO();
 
-        dto.setId(revenues.getId());
-        dto.setValue(revenues.getValue());
-        dto.setDate(revenues.getDate());
-        dto.setDescription(revenues.getDescription());
-        dto.setAccount(revenues.getAccount());
-        dto.setCategory(revenues.getCategory());
+        dto.setId(revenue.getId());
+        dto.setValue(revenue.getValue());
+        dto.setDate(revenue.getDate());
+        dto.setDescription(revenue.getDescription());
+        dto.setAccount(revenue.getAccount());
+        dto.setCategory(revenue.getCategory());
 
         return dto;
     }
 
-    public RevenuesDTO optionaltoDto(Optional<Revenues> revenues) {
+    public RevenuesDTO optionaltoDto(Optional<Revenues> revenue) {
         RevenuesDTO dto = new RevenuesDTO();
 
-        dto.setId(revenues.get().getId());
-        dto.setValue(revenues.get().getValue());
-        dto.setDate(revenues.get().getDate());
-        dto.setDescription(revenues.get().getDescription());
-        dto.setAccount(revenues.get().getAccount());
-        dto.setCategory(revenues.get().getCategory());
+        dto.setId(revenue.get().getId());
+        dto.setValue(revenue.get().getValue());
+        dto.setDate(revenue.get().getDate());
+        dto.setDescription(revenue.get().getDescription());
+        dto.setAccount(revenue.get().getAccount());
+        dto.setCategory(revenue.get().getCategory());
 
         return dto;
     }
 
     public Revenues toRevenue(RevenuesDTO dto) {
-        Revenues revenues = new Revenues();
+        Revenues revenue = new Revenues();
 
-        revenues.setId(dto.getId());
-        revenues.setValue(dto.getValue());
-        revenues.setDate(dto.getDate());
-        revenues.setDescription(dto.getDescription());
-        revenues.setAccount(dto.getAccount());
-        revenues.setCategory(dto.getCategory());
+        revenue.setId(dto.getId());
+        revenue.setValue(dto.getValue());
+        revenue.setDate(dto.getDate());
+        revenue.setDescription(dto.getDescription());
+        revenue.setAccount(dto.getAccount());
+        revenue.setCategory(dto.getCategory());
 
-        return revenues;
+        return revenue;
     }
-
 
     public List<RevenuesDTO> toListDTO(List<Revenues> list) {
         return list.stream().map(this::toDto).collect(Collectors.toList());

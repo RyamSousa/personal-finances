@@ -1,11 +1,14 @@
 package com.personal_finances.service;
 
 import com.personal_finances.mapper.CategoriesMapper;
+import com.personal_finances.mapper.ExpendituresMapper;
 import com.personal_finances.mapper.RevenuesMapper;
 import com.personal_finances.model.Categories;
+import com.personal_finances.model.Expenditures;
 import com.personal_finances.model.Revenues;
-import com.personal_finances.model.dto.CategoriesDTO;
+import com.personal_finances.model.dto.ExpendituresDTO;
 import com.personal_finances.model.dto.RevenuesDTO;
+import com.personal_finances.repository.ExpendituresRepository;
 import com.personal_finances.repository.RevenuesRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,30 +21,30 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class RevenuesService {
+public class ExpendituresService {
 
-    private final RevenuesRepository repository;
-    private final RevenuesMapper mapperRevenue;
+    private final ExpendituresRepository repository;
+    private final ExpendituresMapper mapperExpenditure;
     private final CategoriesService categoriesService;
     private final CategoriesMapper categoriesMapper;
 
     @Transactional
-    public RevenuesDTO save(RevenuesDTO dto){
+    public ExpendituresDTO save(ExpendituresDTO dto){
 
         Categories category = categoriesMapper.toCategories(
                 categoriesService.findById(dto.getCategory().getId())
         );
 
         dto.setCategory(category);
-        Revenues revenue = mapperRevenue.toRevenue(dto);
-        repository.save(revenue);
+        Expenditures expenditure = mapperExpenditure.toExpenditure(dto);
+        repository.save(expenditure);
 
-        return mapperRevenue.toDto(revenue);
+        return mapperExpenditure.toDto(expenditure);
     }
 
     @Transactional
-    public RevenuesDTO delete(Long id){
-        RevenuesDTO dto = this.findById(id);
+    public ExpendituresDTO delete(Long id){
+        ExpendituresDTO dto = this.findById(id);
 
         repository.deleteById(id);
 
@@ -49,33 +52,33 @@ public class RevenuesService {
     }
 
     @Transactional(readOnly = true)
-    public RevenuesDTO findById(Long id){
-        Optional<Revenues> optionalRevenue = repository.findById(id);
+    public ExpendituresDTO findById(Long id){
+        Optional<Expenditures> optionalExpenditure = repository.findById(id);
 
-        if (optionalRevenue.isEmpty()) {
+        if (optionalExpenditure.isEmpty()) {
             System.out.println("Lançar exceção");
         }
 
-        return mapperRevenue.optionaltoDto(optionalRevenue);
+        return mapperExpenditure.optionaltoDto(optionalExpenditure);
     }
 
     @Transactional(readOnly = true)
-    public List<RevenuesDTO> findByCategory(Long id){
-        List<Optional<Revenues>> optionalRevenue = repository.findByCategory(id);
+    public List<ExpendituresDTO> findByCategory(Long id){
+        List<Optional<Expenditures>> optionalExpenditure = repository.findByCategory(id);
 
-        if (optionalRevenue.isEmpty()){
+        if (optionalExpenditure.isEmpty()){
             System.out.println("Lançar exceção");
         }
-        List<RevenuesDTO> dtos = optionalRevenue.stream()
-                .map(mapperRevenue::optionaltoDto)
+        List<ExpendituresDTO> dtos = optionalExpenditure.stream()
+                .map(mapperExpenditure::optionaltoDto)
                 .collect(Collectors.toList());
 
         return dtos;
     }
 
     @Transactional(readOnly = true)
-    public List<RevenuesDTO> findAllRevenues(){
-        return mapperRevenue.toListDTO(repository.findAll());
+    public List<ExpendituresDTO> findAllRevenues(){
+        return mapperExpenditure.toListDTO(repository.findAll());
     }
 
 }

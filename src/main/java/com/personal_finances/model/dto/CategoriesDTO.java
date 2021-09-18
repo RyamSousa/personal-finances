@@ -20,7 +20,4 @@ public class CategoriesDTO {
     private Long id;
     @NotNull
     private String name;
-
-    private List<Expenditures> expenditures = new ArrayList<>();
-    private List<Revenues> revenues = new ArrayList<>();
 }

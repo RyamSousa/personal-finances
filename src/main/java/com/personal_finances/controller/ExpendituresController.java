@@ -1,8 +1,8 @@
 package com.personal_finances.controller;
 
-import com.personal_finances.model.dto.CategoriesDTO;
+import com.personal_finances.model.dto.ExpendituresDTO;
 import com.personal_finances.model.dto.RevenuesDTO;
-import com.personal_finances.service.CategoriesService;
+import com.personal_finances.service.ExpendituresService;
 import com.personal_finances.service.RevenuesService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,32 +15,34 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "/revenues")
+@RequestMapping(value = "/expenditures")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class RevenuesController {
-    private final RevenuesService serviceRevenue;
+public class ExpendituresController {
+
+    private final ExpendituresService serviceExpenditures;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<RevenuesDTO> save(@Valid @RequestBody RevenuesDTO dto){
-        return ResponseEntity.ok(serviceRevenue.save(dto));
+    public ResponseEntity<ExpendituresDTO> save(@Valid @RequestBody ExpendituresDTO dto){
+        return ResponseEntity.ok(serviceExpenditures.save(dto));
     }
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<RevenuesDTO> findById(@PathVariable Long id){
-        return ResponseEntity.ok(serviceRevenue.findById(id));
+    public ResponseEntity<ExpendituresDTO> findById(@PathVariable Long id){
+        return ResponseEntity.ok(serviceExpenditures.findById(id));
     }
 
     @GetMapping(value = "/category/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<RevenuesDTO>> findByCategory(@PathVariable Long id){
-        return ResponseEntity.ok(serviceRevenue.findByCategory(id));
+    public ResponseEntity<List<ExpendituresDTO>> findByCategory(@PathVariable Long id){
+        return ResponseEntity.ok(serviceExpenditures.findByCategory(id));
     }
 
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<RevenuesDTO> delete(@PathVariable Long id){
-        return ResponseEntity.ok(serviceRevenue.delete(id));
+    public ResponseEntity<ExpendituresDTO> delete(@PathVariable Long id){
+        return ResponseEntity.ok(serviceExpenditures.delete(id));
     }
+
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<RevenuesDTO>> findAllCategories(){
-        return ResponseEntity.ok(serviceRevenue.findAllRevenues());
+    public ResponseEntity<List<ExpendituresDTO>> findAllCategories(){
+        return ResponseEntity.ok(serviceExpenditures.findAllRevenues());
     }
 }
