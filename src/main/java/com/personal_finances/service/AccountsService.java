@@ -1,15 +1,17 @@
 package com.personal_finances.service;
 
 import com.personal_finances.exceptions.BusinessException;
+import com.personal_finances.mapper.RevenuesMapper;
 import com.personal_finances.mapper.UsersMapper;
 import com.personal_finances.model.Accounts;
+import com.personal_finances.model.Revenues;
 import com.personal_finances.model.dto.AccountsDTO;
+import com.personal_finances.model.dto.RevenuesDTO;
 import com.personal_finances.model.dto.UsersDTO;
 import com.personal_finances.repository.AccountsRepository;
 import com.personal_finances.mapper.AccountMapper;
 import com.personal_finances.utils.GetDate;
 import com.personal_finances.utils.MessagesExceptions;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -26,6 +29,7 @@ public class AccountsService {
     private final AccountMapper accountsMapper;
     private final UsersService usersService;
     private final UsersMapper usersMapper;
+    private final RevenuesMapper revenuesMapper;
 
     @Transactional
     public AccountsDTO save(AccountsDTO dto){
@@ -35,7 +39,7 @@ public class AccountsService {
         if(!(user == null)){
             dto.setUser(usersMapper.toUsers(user));
             dto.setCreateDate(GetDate.getDateSystem());
-            Optional<Accounts> optionalAccount = repository.findByAccountNumber(
+            Optional<Accounts> optionalAccount = repository.findByAccountNumberUser(
                     dto.getAccountNumber(), dto.getUser().getCpf());
 
             if (optionalAccount.isPresent()){
@@ -78,5 +82,28 @@ public class AccountsService {
         }
 
         return lst;
+    }
+
+    @Transactional
+    public List<RevenuesDTO> findAllRevenuesForAccount(Long id){
+
+        List<RevenuesDTO> lst = repository.findAllRevenuesForAccount(id)
+                .stream().map(revenuesMapper::optionaltoDto).collect(Collectors.toList());
+
+        if (lst.isEmpty()){
+            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+        }
+
+        return lst;
+    }
+
+    @Transactional
+    public AccountsDTO findByAccountNumber(Long accountNumber){
+        Optional<Accounts> account = repository.findByAccountNumber(accountNumber);
+        if(account.isEmpty()){
+            throw new BusinessException(MessagesExceptions.ACCOUNT_NOT_FOUND);
+        }
+
+        return accountsMapper.optionaltoDto(account);
     }
 }

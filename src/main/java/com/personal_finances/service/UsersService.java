@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -90,9 +92,11 @@ public class UsersService {
         return lst;
     }
 
+    @Transactional
     public List<AccountsDTO> findAllAccountsForUser(Long id) {
 
-        List<AccountsDTO> lst = accountMapper.toListDTO(repository.findAllAccountsForUser(id));
+        List<AccountsDTO> lst = repository.findAllAccountsForUser(id)
+                .stream().map(accountMapper::optionaltoDto).collect(Collectors.toList());
 
         if (lst.isEmpty()){
             throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);

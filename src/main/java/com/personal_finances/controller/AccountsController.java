@@ -2,6 +2,7 @@ package com.personal_finances.controller;
 
 import com.personal_finances.model.dto.AccountsDTO;
 import com.personal_finances.model.dto.CategoriesDTO;
+import com.personal_finances.model.dto.RevenuesDTO;
 import com.personal_finances.service.AccountsService;
 import com.personal_finances.service.CategoriesService;
 import io.swagger.annotations.Api;
@@ -44,9 +45,23 @@ public class AccountsController {
         return ResponseEntity.ok(serviceAccounts.delete(id));
     }
 
+    @ApiOperation("Buscar uma conta pelo número")
+    @GetMapping(value = "/accountnumber/{accountNumber}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<AccountsDTO> findByAccountNumber(@PathVariable Long accountNumber){
+        return ResponseEntity.ok(serviceAccounts.findByAccountNumber(accountNumber));
+    }
+
     @ApiOperation("Busca todas as contas")
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<AccountsDTO>> findAllAccounts(){
         return ResponseEntity.ok(serviceAccounts.findAllAccounts());
     }
+    @ApiOperation("Busca todas as receitas de uma conta")
+    @GetMapping(value = "/revenues/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<RevenuesDTO>> findAllRevenuesForAccount(@PathVariable Long id){
+        return ResponseEntity.ok(serviceAccounts.findAllRevenuesForAccount(id));
+    }
+
+
+
 }

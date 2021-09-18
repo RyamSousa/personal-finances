@@ -1,10 +1,12 @@
 package com.personal_finances.service;
 
 import com.personal_finances.exceptions.BusinessException;
+import com.personal_finances.mapper.AccountMapper;
 import com.personal_finances.mapper.CategoriesMapper;
 import com.personal_finances.mapper.RevenuesMapper;
 import com.personal_finances.model.Categories;
 import com.personal_finances.model.Revenues;
+import com.personal_finances.model.dto.AccountsDTO;
 import com.personal_finances.model.dto.RevenuesDTO;
 import com.personal_finances.repository.RevenuesRepository;
 import com.personal_finances.utils.MessagesExceptions;
@@ -25,15 +27,21 @@ public class RevenuesService {
     private final RevenuesMapper mapperRevenue;
     private final CategoriesService categoriesService;
     private final CategoriesMapper categoriesMapper;
+    private final AccountsService accountsService;
+    private final AccountMapper accountMapper;
 
     @Transactional
     public RevenuesDTO save(RevenuesDTO dto){
+
+        AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
 
         Categories category = categoriesMapper.toCategories(
                 categoriesService.findById(dto.getCategory().getId())
         );
 
         dto.setCategory(category);
+        dto.setAccount(accountMapper.toAccounts(account));
+
         Revenues revenue = mapperRevenue.toRevenue(dto);
         repository.save(revenue);
 

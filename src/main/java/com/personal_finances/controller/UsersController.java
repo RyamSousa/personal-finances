@@ -1,5 +1,6 @@
 package com.personal_finances.controller;
 
+import com.personal_finances.model.dto.AccountsDTO;
 import com.personal_finances.model.dto.UsersDTO;
 import com.personal_finances.service.UsersService;
 import io.swagger.annotations.Api;
@@ -50,5 +51,11 @@ public class UsersController {
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UsersDTO>> findAllUsers(){
         return ResponseEntity.ok(usersService.findAllUsers());
+    }
+
+    @ApiOperation("Busca todas as contas de um determinado usuário")
+    @GetMapping(value = "/accounts/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AccountsDTO>> findAllAccountsForUser(@PathVariable Long id){
+        return ResponseEntity.ok(usersService.findAllAccountsForUser(id));
     }
 }
