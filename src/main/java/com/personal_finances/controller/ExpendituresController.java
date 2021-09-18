@@ -4,6 +4,8 @@ import com.personal_finances.model.dto.ExpendituresDTO;
 import com.personal_finances.model.dto.RevenuesDTO;
 import com.personal_finances.service.ExpendituresService;
 import com.personal_finances.service.RevenuesService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@Api("Retorna dados das despesas")
 @RestController
 @RequestMapping(value = "/expenditures")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -21,26 +24,31 @@ public class ExpendituresController {
 
     private final ExpendituresService serviceExpenditures;
 
+    @ApiOperation("Cria uma nova despesa")
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ExpendituresDTO> save(@Valid @RequestBody ExpendituresDTO dto){
         return ResponseEntity.ok(serviceExpenditures.save(dto));
     }
 
+    @ApiOperation("Busca uma despesa por id")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ExpendituresDTO> findById(@PathVariable Long id){
         return ResponseEntity.ok(serviceExpenditures.findById(id));
     }
 
+    @ApiOperation("Busca uma despesa por categoria")
     @GetMapping(value = "/category/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ExpendituresDTO>> findByCategory(@PathVariable Long id){
         return ResponseEntity.ok(serviceExpenditures.findByCategory(id));
     }
 
+    @ApiOperation("Deleta uma despesa por id")
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ExpendituresDTO> delete(@PathVariable Long id){
         return ResponseEntity.ok(serviceExpenditures.delete(id));
     }
 
+    @ApiOperation("Busca todas as despesas")
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ExpendituresDTO>> findAllExpenditures(){
         return ResponseEntity.ok(serviceExpenditures.findAllExpenditures());
