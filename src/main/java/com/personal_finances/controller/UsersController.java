@@ -35,7 +35,7 @@ public class UsersController {
     }
 
     @ApiOperation("Busca um usuário por cpf")
-    @GetMapping(value = "/category/{cpf}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/cpf/{cpf}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UsersDTO> findByCpf(@PathVariable String cpf){
         return ResponseEntity.ok(usersService.findByCpf(cpf));
     }

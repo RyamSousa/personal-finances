@@ -1,12 +1,15 @@
 package com.personal_finances.service;
 
+import com.personal_finances.exceptions.BusinessException;
 import com.personal_finances.mapper.AccountMapper;
 import com.personal_finances.mapper.UsersMapper;
 import com.personal_finances.model.Users;
 import com.personal_finances.model.dto.AccountsDTO;
+import com.personal_finances.model.dto.RevenuesDTO;
 import com.personal_finances.model.dto.UsersDTO;
 import com.personal_finances.repository.AccountsRepository;
 import com.personal_finances.repository.UsersRepository;
+import com.personal_finances.utils.MessagesExceptions;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +32,9 @@ public class UsersService {
         UsersDTO userValidation = this.findByCpf(dto.getCpf());
 
         if(!(userValidation == null)){
-            throw new RuntimeException("Usuário já existe");
+            throw new BusinessException(MessagesExceptions.DATA_ALREADY_EXISTS);
         }
+
         Users user = mapperUsers.toUsers(dto);
         repository.save(user);
 
@@ -57,7 +61,7 @@ public class UsersService {
         Optional<Users> optionalUser = repository.findById(id);
 
         if (optionalUser.isEmpty()) {
-            System.out.println("Usuário não existe");
+            throw new BusinessException(MessagesExceptions.USER_NOT_FOUND);
         }
 
         return mapperUsers.optionaltoDto(optionalUser);
@@ -68,7 +72,7 @@ public class UsersService {
         Optional<Users> optionalUser = repository.findByCpf(cpf);
         UsersDTO dto = null;
 
-        if (!(optionalUser.isEmpty())){
+        if (optionalUser.isPresent()){
             dto = mapperUsers.optionaltoDto(optionalUser);
         }
 
@@ -77,11 +81,24 @@ public class UsersService {
 
     @Transactional(readOnly = true)
     public List<UsersDTO> findAllUsers(){
-        return mapperUsers.toListDTO(repository.findAll());
+        List<UsersDTO> lst = mapperUsers.toListDTO(repository.findAll());;
+
+        if (lst.isEmpty()){
+            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+        }
+
+        return lst;
     }
 
     public List<AccountsDTO> findAllAccountsForUser(Long id) {
-        return accountMapper.toListDTO(repository.findAllAccountsForUser(id));
+
+        List<AccountsDTO> lst = accountMapper.toListDTO(repository.findAllAccountsForUser(id));
+
+        if (lst.isEmpty()){
+            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+        }
+
+        return lst;
     }
 
 }

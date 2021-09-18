@@ -1,5 +1,6 @@
 package com.personal_finances.service;
 
+import com.personal_finances.exceptions.BusinessException;
 import com.personal_finances.mapper.CategoriesMapper;
 import com.personal_finances.mapper.ExpendituresMapper;
 import com.personal_finances.mapper.RevenuesMapper;
@@ -10,6 +11,7 @@ import com.personal_finances.model.dto.ExpendituresDTO;
 import com.personal_finances.model.dto.RevenuesDTO;
 import com.personal_finances.repository.ExpendituresRepository;
 import com.personal_finances.repository.RevenuesRepository;
+import com.personal_finances.utils.MessagesExceptions;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +58,7 @@ public class ExpendituresService {
         Optional<Expenditures> optionalExpenditure = repository.findById(id);
 
         if (optionalExpenditure.isEmpty()) {
-            System.out.println("Lançar exceção");
+            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
         }
 
         return mapperExpenditure.optionaltoDto(optionalExpenditure);
@@ -67,18 +69,23 @@ public class ExpendituresService {
         List<Optional<Expenditures>> optionalExpenditure = repository.findByCategory(id);
 
         if (optionalExpenditure.isEmpty()){
-            System.out.println("Lançar exceção");
+            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
         }
-        List<ExpendituresDTO> dtos = optionalExpenditure.stream()
+
+        return optionalExpenditure.stream()
                 .map(mapperExpenditure::optionaltoDto)
                 .collect(Collectors.toList());
-
-        return dtos;
     }
 
     @Transactional(readOnly = true)
     public List<ExpendituresDTO> findAllExpenditures(){
-        return mapperExpenditure.toListDTO(repository.findAll());
+        List<ExpendituresDTO> lst = mapperExpenditure.toListDTO(repository.findAll());
+
+        if (lst.isEmpty()){
+            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+        }
+
+        return lst;
     }
 
 }
