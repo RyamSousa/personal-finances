@@ -22,6 +22,6 @@ public class AccountsDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDateTime createDate;
 
-    //@NotNull
+    @NotNull
     private Users user;
 }
