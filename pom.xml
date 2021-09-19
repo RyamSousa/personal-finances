@@ -6,13 +6,13 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.5.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.personal_finances</groupId>
 	<artifactId>personal_finances</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>personal_finances</name>
-	<description>Project spring developed for Ryam</description>
+	<description>API Rest developed for project personal finances</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -28,16 +28,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct</artifactId>
-			<version>1.4.2.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct-processor</artifactId>
-			<version>1.4.2.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>
