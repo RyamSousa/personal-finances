@@ -51,6 +51,26 @@ public class RevenuesService {
     }
 
     @Transactional
+    public RevenuesDTO update(RevenuesDTO dto){
+
+        AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
+
+        Categories category = categoriesMapper.toCategories(
+                categoriesService.findById(dto.getCategory().getId())
+        );
+
+        dto.setCategory(category);
+        dto.setAccount(accountMapper.toAccounts(account));
+
+        Revenues revenue = mapperRevenue.toRevenue(dto);
+        revenue.setId(dto.getId());
+
+        repository.save(revenue);
+
+        return mapperRevenue.toDto(revenue);
+    }
+
+    @Transactional
     public RevenuesDTO delete(Long id){
         RevenuesDTO dto = this.findById(id);
 
