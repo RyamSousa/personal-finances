@@ -55,6 +55,26 @@ public class ExpendituresService {
     }
 
     @Transactional
+    public ExpendituresDTO update(ExpendituresDTO dto){
+
+        AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
+
+        Categories category = categoriesMapper.toCategories(
+                categoriesService.findById(dto.getCategory().getId())
+        );
+
+        dto.setCategory(category);
+        dto.setAccount(accountMapper.toAccounts(account));
+
+        Expenditures expenditure = mapperExpenditure.toExpenditure(dto);
+        expenditure.setId(dto.getId());
+
+        repository.save(expenditure);
+
+        return mapperExpenditure.toDto(expenditure);
+    }
+
+    @Transactional
     public ExpendituresDTO delete(Long id){
         ExpendituresDTO dto = this.findById(id);
 
