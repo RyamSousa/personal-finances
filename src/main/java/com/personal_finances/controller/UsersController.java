@@ -55,7 +55,7 @@ public class UsersController {
 
     @ApiOperation("Busca todas as contas de um determinado usuário")
     @GetMapping(value = "/accounts/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<AccountsDTO>> findAllAccountsForUser(@PathVariable Long id){
-        return ResponseEntity.ok(usersService.findAllAccountsForUser(id));
+    public ResponseEntity<List<AccountsDTO>> findAllAccountsByUser(@PathVariable Long id){
+        return ResponseEntity.ok(usersService.findAllAccountsByUser(id));
     }
 }

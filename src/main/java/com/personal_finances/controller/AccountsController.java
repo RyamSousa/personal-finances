@@ -2,6 +2,7 @@ package com.personal_finances.controller;
 
 import com.personal_finances.model.dto.AccountsDTO;
 import com.personal_finances.model.dto.CategoriesDTO;
+import com.personal_finances.model.dto.ExpendituresDTO;
 import com.personal_finances.model.dto.RevenuesDTO;
 import com.personal_finances.service.AccountsService;
 import com.personal_finances.service.CategoriesService;
@@ -58,8 +59,14 @@ public class AccountsController {
     }
     @ApiOperation("Busca todas as receitas de uma conta")
     @GetMapping(value = "/revenues/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<RevenuesDTO>> findAllRevenuesForAccount(@PathVariable Long id){
-        return ResponseEntity.ok(serviceAccounts.findAllRevenuesForAccount(id));
+    public ResponseEntity<List<RevenuesDTO>> findAllRevenuesByAccount(@PathVariable Long id){
+        return ResponseEntity.ok(serviceAccounts.findAllRevenuesByAccount(id));
+    }
+
+    @ApiOperation("Busca todas as despesas de uma conta")
+    @GetMapping(value = "/expenditures/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ExpendituresDTO>> findAllExpendituresByAccount(@PathVariable Long id){
+        return ResponseEntity.ok(serviceAccounts.findAllExpendituresByAccount(id));
     }
 
 

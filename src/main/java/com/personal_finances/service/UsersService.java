@@ -5,7 +5,6 @@ import com.personal_finances.mapper.AccountMapper;
 import com.personal_finances.mapper.UsersMapper;
 import com.personal_finances.model.Users;
 import com.personal_finances.model.dto.AccountsDTO;
-import com.personal_finances.model.dto.RevenuesDTO;
 import com.personal_finances.model.dto.UsersDTO;
 import com.personal_finances.repository.AccountsRepository;
 import com.personal_finances.repository.UsersRepository;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -26,6 +24,7 @@ public class UsersService {
 
     private final UsersRepository repository;
     private final UsersMapper mapperUsers;
+
     private final AccountsRepository accountsRepository;
     private final AccountMapper accountMapper;
 
@@ -47,7 +46,7 @@ public class UsersService {
     public UsersDTO delete(Long id){
         UsersDTO userValidation = this.findById(id);
 
-        List<AccountsDTO> accounts = this.findAllAccountsForUser(userValidation.getId());
+        List<AccountsDTO> accounts = this.findAllAccountsByUser(userValidation.getId());
 
         for (AccountsDTO ac: accounts) {
             accountsRepository.deleteById(ac.getId());
@@ -93,9 +92,9 @@ public class UsersService {
     }
 
     @Transactional
-    public List<AccountsDTO> findAllAccountsForUser(Long id) {
+    public List<AccountsDTO> findAllAccountsByUser(Long id) {
 
-        List<AccountsDTO> lst = repository.findAllAccountsForUser(id)
+        List<AccountsDTO> lst = repository.findAllAccountsByUser(id)
                 .stream().map(accountMapper::optionaltoDto).collect(Collectors.toList());
 
         if (lst.isEmpty()){

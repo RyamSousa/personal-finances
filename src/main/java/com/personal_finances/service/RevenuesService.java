@@ -25,8 +25,10 @@ public class RevenuesService {
 
     private final RevenuesRepository repository;
     private final RevenuesMapper mapperRevenue;
+
     private final CategoriesService categoriesService;
     private final CategoriesMapper categoriesMapper;
+
     private final AccountsService accountsService;
     private final AccountMapper accountMapper;
 

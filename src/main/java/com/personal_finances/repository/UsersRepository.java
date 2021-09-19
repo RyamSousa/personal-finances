@@ -15,7 +15,7 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
     @Query("SELECT ac FROM Accounts ac " +
             "INNER JOIN Users us ON (us.id = ac.user.id) " +
             "WHERE us.id = :id ")
-    List<Optional<Accounts>> findAllAccountsForUser(Long id);
+    List<Optional<Accounts>> findAllAccountsByUser(Long id);
 
     Optional<Users> findByCpf(String cpf);
 }

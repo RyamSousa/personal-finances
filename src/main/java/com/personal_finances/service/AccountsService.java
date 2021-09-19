@@ -1,11 +1,12 @@
 package com.personal_finances.service;
 
 import com.personal_finances.exceptions.BusinessException;
+import com.personal_finances.mapper.ExpendituresMapper;
 import com.personal_finances.mapper.RevenuesMapper;
 import com.personal_finances.mapper.UsersMapper;
 import com.personal_finances.model.Accounts;
-import com.personal_finances.model.Revenues;
 import com.personal_finances.model.dto.AccountsDTO;
+import com.personal_finances.model.dto.ExpendituresDTO;
 import com.personal_finances.model.dto.RevenuesDTO;
 import com.personal_finances.model.dto.UsersDTO;
 import com.personal_finances.repository.AccountsRepository;
@@ -27,9 +28,12 @@ public class AccountsService {
 
     private final AccountsRepository repository;
     private final AccountMapper accountsMapper;
+
     private final UsersService usersService;
     private final UsersMapper usersMapper;
+
     private final RevenuesMapper revenuesMapper;
+    private final ExpendituresMapper expendituresMapper;
 
     @Transactional
     public AccountsDTO save(AccountsDTO dto){
@@ -73,6 +77,16 @@ public class AccountsService {
         return accountsMapper.optionaltoDto(optionalAccount);
     }
 
+    @Transactional
+    public AccountsDTO findByAccountNumber(Long accountNumber){
+        Optional<Accounts> account = repository.findByAccountNumber(accountNumber);
+        if(account.isEmpty()){
+            throw new BusinessException(MessagesExceptions.ACCOUNT_NOT_FOUND);
+        }
+
+        return accountsMapper.optionaltoDto(account);
+    }
+
     @Transactional(readOnly = true)
     public List<AccountsDTO> findAllAccounts(){
         List<AccountsDTO> lst = accountsMapper.toListDTO(repository.findAll());
@@ -85,9 +99,9 @@ public class AccountsService {
     }
 
     @Transactional
-    public List<RevenuesDTO> findAllRevenuesForAccount(Long id){
+    public List<RevenuesDTO> findAllRevenuesByAccount(Long id){
 
-        List<RevenuesDTO> lst = repository.findAllRevenuesForAccount(id)
+        List<RevenuesDTO> lst = repository.findAllRevenuesByAccount(id)
                 .stream().map(revenuesMapper::optionaltoDto).collect(Collectors.toList());
 
         if (lst.isEmpty()){
@@ -98,12 +112,15 @@ public class AccountsService {
     }
 
     @Transactional
-    public AccountsDTO findByAccountNumber(Long accountNumber){
-        Optional<Accounts> account = repository.findByAccountNumber(accountNumber);
-        if(account.isEmpty()){
-            throw new BusinessException(MessagesExceptions.ACCOUNT_NOT_FOUND);
+    public List<ExpendituresDTO> findAllExpendituresByAccount(Long id){
+
+        List<ExpendituresDTO> lst = repository.findAllExpendituresByAccount(id)
+                .stream().map(expendituresMapper::optionaltoDto).collect(Collectors.toList());
+
+        if (lst.isEmpty()){
+            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
         }
 
-        return accountsMapper.optionaltoDto(account);
+        return lst;
     }
 }
