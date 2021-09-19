@@ -1,11 +1,15 @@
 package com.personal_finances.service;
 
+import com.personal_finances.exceptions.BusinessException;
+import com.personal_finances.mapper.AccountMapper;
 import com.personal_finances.mapper.CategoriesMapper;
 import com.personal_finances.mapper.RevenuesMapper;
 import com.personal_finances.model.Categories;
 import com.personal_finances.model.Revenues;
+import com.personal_finances.model.dto.AccountsDTO;
 import com.personal_finances.model.dto.RevenuesDTO;
 import com.personal_finances.repository.RevenuesRepository;
+import com.personal_finances.utils.MessagesExceptions;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,18 +25,46 @@ public class RevenuesService {
 
     private final RevenuesRepository repository;
     private final RevenuesMapper mapperRevenue;
+
     private final CategoriesService categoriesService;
     private final CategoriesMapper categoriesMapper;
 
+    private final AccountsService accountsService;
+    private final AccountMapper accountMapper;
+
     @Transactional
     public RevenuesDTO save(RevenuesDTO dto){
+
+        AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
 
         Categories category = categoriesMapper.toCategories(
                 categoriesService.findById(dto.getCategory().getId())
         );
 
         dto.setCategory(category);
+        dto.setAccount(accountMapper.toAccounts(account));
+
         Revenues revenue = mapperRevenue.toRevenue(dto);
+        repository.save(revenue);
+
+        return mapperRevenue.toDto(revenue);
+    }
+
+    @Transactional
+    public RevenuesDTO update(RevenuesDTO dto){
+
+        AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
+
+        Categories category = categoriesMapper.toCategories(
+                categoriesService.findById(dto.getCategory().getId())
+        );
+
+        dto.setCategory(category);
+        dto.setAccount(accountMapper.toAccounts(account));
+
+        Revenues revenue = mapperRevenue.toRevenue(dto);
+        revenue.setId(dto.getId());
+
         repository.save(revenue);
 
         return mapperRevenue.toDto(revenue);
@@ -52,7 +84,7 @@ public class RevenuesService {
         Optional<Revenues> optionalRevenue = repository.findById(id);
 
         if (optionalRevenue.isEmpty()) {
-            System.out.println("Lançar exceção");
+            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
         }
 
         return mapperRevenue.optionaltoDto(optionalRevenue);
@@ -63,18 +95,24 @@ public class RevenuesService {
         List<Optional<Revenues>> optionalRevenue = repository.findByCategory(id);
 
         if (optionalRevenue.isEmpty()){
-            System.out.println("Lançar exceção");
+            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
         }
-        List<RevenuesDTO> dtos = optionalRevenue.stream()
+
+        return optionalRevenue.stream()
                 .map(mapperRevenue::optionaltoDto)
                 .collect(Collectors.toList());
-
-        return dtos;
     }
 
     @Transactional(readOnly = true)
     public List<RevenuesDTO> findAllRevenues(){
-        return mapperRevenue.toListDTO(repository.findAll());
+
+        List<RevenuesDTO> lst = mapperRevenue.toListDTO(repository.findAll());
+
+        if (lst.isEmpty()){
+            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+        }
+
+        return lst;
     }
 
 }

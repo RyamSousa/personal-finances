@@ -30,6 +30,12 @@ public class ExpendituresController {
         return ResponseEntity.ok(serviceExpenditures.save(dto));
     }
 
+    @ApiOperation("Atualiza uma despesa")
+    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ExpendituresDTO> update(@Valid @RequestBody ExpendituresDTO dto){
+        return ResponseEntity.ok(serviceExpenditures.update(dto));
+    }
+
     @ApiOperation("Busca uma despesa por id")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ExpendituresDTO> findById(@PathVariable Long id){

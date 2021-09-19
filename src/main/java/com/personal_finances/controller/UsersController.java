@@ -1,5 +1,6 @@
 package com.personal_finances.controller;
 
+import com.personal_finances.model.dto.AccountsDTO;
 import com.personal_finances.model.dto.UsersDTO;
 import com.personal_finances.service.UsersService;
 import io.swagger.annotations.Api;
@@ -28,6 +29,12 @@ public class UsersController {
         return ResponseEntity.ok(usersService.save(dto));
     }
 
+    @ApiOperation("Atualiza os dados do usuário")
+    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<UsersDTO> update(@Valid @RequestBody UsersDTO dto){
+        return ResponseEntity.ok(usersService.update(dto));
+    }
+
     @ApiOperation("Busca um usuário por id")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UsersDTO> findById(@PathVariable Long id){
@@ -35,7 +42,7 @@ public class UsersController {
     }
 
     @ApiOperation("Busca um usuário por cpf")
-    @GetMapping(value = "/category/{cpf}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/cpf/{cpf}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UsersDTO> findByCpf(@PathVariable String cpf){
         return ResponseEntity.ok(usersService.findByCpf(cpf));
     }
@@ -50,5 +57,11 @@ public class UsersController {
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UsersDTO>> findAllUsers(){
         return ResponseEntity.ok(usersService.findAllUsers());
+    }
+
+    @ApiOperation("Busca todas as contas de um determinado usuário")
+    @GetMapping(value = "/accounts/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AccountsDTO>> findAllAccountsByUser(@PathVariable Long id){
+        return ResponseEntity.ok(usersService.findAllAccountsByUser(id));
     }
 }

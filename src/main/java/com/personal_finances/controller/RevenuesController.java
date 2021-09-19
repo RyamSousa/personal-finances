@@ -30,6 +30,12 @@ public class RevenuesController {
         return ResponseEntity.ok(serviceRevenue.save(dto));
     }
 
+    @ApiOperation("Atualiza uma receita")
+    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<RevenuesDTO> update(@Valid @RequestBody RevenuesDTO dto){
+        return ResponseEntity.ok(serviceRevenue.update(dto));
+    }
+
     @ApiOperation("Busca uma receita por id")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<RevenuesDTO> findById(@PathVariable Long id){

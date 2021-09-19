@@ -1,9 +1,11 @@
 package com.personal_finances.service;
 
+import com.personal_finances.exceptions.BusinessException;
 import com.personal_finances.mapper.CategoriesMapper;
 import com.personal_finances.model.Categories;
 import com.personal_finances.model.dto.CategoriesDTO;
 import com.personal_finances.repository.CategoriesRepository;
+import com.personal_finances.utils.MessagesExceptions;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,7 @@ public class CategoriesService {
         Optional<Categories> optionalCategory = repository.findByName(dto.getName());
 
         if (optionalCategory.isPresent()){
-            System.out.println("Lançar exceção");
+            throw new BusinessException(MessagesExceptions.DATA_ALREADY_EXISTS);
         }
 
         Categories category = mapperCategory.toCategories(dto);
@@ -47,13 +49,20 @@ public class CategoriesService {
         Optional<Categories> optionalCategory = repository.findById(id);
 
         if (optionalCategory.isEmpty()) {
-            System.out.println("Lançar exceção");
+            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
         }
+
         return mapperCategory.optionaltoDto(optionalCategory);
     }
 
     @Transactional(readOnly = true)
     public List<CategoriesDTO> findAllCategories(){
-        return mapperCategory.toListDTO(repository.findAll());
+
+        List<CategoriesDTO> lst = mapperCategory.toListDTO(repository.findAll());
+
+        if (lst.isEmpty()){
+            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+        }
+        return lst;
     }
 }
