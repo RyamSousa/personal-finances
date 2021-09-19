@@ -34,6 +34,12 @@ public class AccountsController {
         return ResponseEntity.ok(serviceAccounts.save(dto));
     }
 
+    @ApiOperation("Atualiza os dados da conta")
+    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<AccountsDTO> update(@Valid @RequestBody AccountsDTO dto){
+        return ResponseEntity.ok(serviceAccounts.update(dto));
+    }
+
     @ApiOperation("Busca uma conta por id")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<AccountsDTO> findById(@PathVariable Long id){
