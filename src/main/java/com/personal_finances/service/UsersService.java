@@ -43,6 +43,22 @@ public class UsersService {
     }
 
     @Transactional
+    public UsersDTO update(UsersDTO dto){
+        UsersDTO userValidation = this.findByCpf(dto.getCpf());
+
+        if(userValidation == null){
+            throw new BusinessException(MessagesExceptions.USER_NOT_FOUND);
+        }
+
+        dto.setId(userValidation.getId());
+
+        Users user = mapperUsers.toUsers(dto);
+        repository.save(user);
+
+        return mapperUsers.toDto(user);
+    }
+
+    @Transactional
     public UsersDTO delete(Long id){
         UsersDTO userValidation = this.findById(id);
 

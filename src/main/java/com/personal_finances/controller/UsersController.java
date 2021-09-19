@@ -29,6 +29,12 @@ public class UsersController {
         return ResponseEntity.ok(usersService.save(dto));
     }
 
+    @ApiOperation("Atualiza os dados do usuário")
+    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<UsersDTO> update(@Valid @RequestBody UsersDTO dto){
+        return ResponseEntity.ok(usersService.update(dto));
+    }
+
     @ApiOperation("Busca um usuário por id")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UsersDTO> findById(@PathVariable Long id){
