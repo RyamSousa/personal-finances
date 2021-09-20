@@ -19,6 +19,4 @@ public interface ExpensesRepository extends JpaRepository<Expenses, Long> {
             "INNER JOIN Expenses ex ON (ac.id = ex.account.id) " +
             "WHERE ac.id = :id AND ex.date LIKE %:date")
     List<Optional<Expenses>> findExpensesByDate(Long id, String date);
-
-    Optional<Expenses> findById(Long id);
 }

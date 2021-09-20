@@ -9,6 +9,7 @@ import com.personal_finances.model.Incomes;
 import com.personal_finances.model.dto.AccountsDTO;
 import com.personal_finances.model.dto.IncomesDTO;
 import com.personal_finances.repository.IncomesRepository;
+import com.personal_finances.utils.GetDate;
 import com.personal_finances.utils.MessagesExceptions;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +105,7 @@ public class IncomesService {
     }
 
     @Transactional(readOnly = true)
-    public List<IncomesDTO> findAllRevenues(){
+    public List<IncomesDTO> findAllIncomes(){
 
         List<IncomesDTO> lst = mapperIncome.toListDTO(repository.findAll());
 
@@ -113,6 +114,16 @@ public class IncomesService {
         }
 
         return lst;
+    }
+
+    @Transactional
+    public List<IncomesDTO> findIncomesByDate(Long id, String date){
+
+        date = GetDate.extractMonthAndYear(date);
+
+        List<Optional<Incomes>> lst = repository.findIncomesByDate(id, date);
+
+        return lst.stream().map(mapperIncome::optionalToDto).collect(Collectors.toList());
     }
 
 }

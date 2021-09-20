@@ -19,9 +19,9 @@ public interface AccountsRepository extends JpaRepository<Accounts, Long> {
             "AND us.cpf = :cpf")
     Optional<Accounts> findByAccountNumberUser(Long accountNumber, String cpf);
 
-    @Query("SELECT re FROM Accounts ac " +
-            "INNER JOIN Incomes re ON (ac.id = re.account.id) " +
-            "WHERE re.account.id = :id ")
+    @Query("SELECT i FROM Accounts ac " +
+            "INNER JOIN Incomes i ON (ac.id = i.account.id) " +
+            "WHERE i.account.id = :id ")
     List<Optional<Incomes>> findAllIncomesByAccount(Long id);
 
     @Query("SELECT ex FROM Accounts ac " +

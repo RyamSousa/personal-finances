@@ -11,9 +11,12 @@ import java.util.Optional;
 @Repository
 public interface IncomesRepository extends JpaRepository<Incomes, Long> {
 
-    @Query("SELECT re FROM Incomes re " +
-            "WHERE re.category.id = :categoryId")
+    @Query("SELECT i FROM Incomes i " +
+            "WHERE i.category.id = :categoryId")
     List<Optional<Incomes>> findByCategory(Long categoryId);
 
-    Optional<Incomes> findById(Long id);
+    @Query("SELECT i FROM Accounts ac " +
+            "INNER JOIN Incomes i ON (ac.id = i.account.id) " +
+            "WHERE ac.id = :id AND i.date LIKE %:date")
+    List<Optional<Incomes>> findIncomesByDate(Long id, String date);
 }

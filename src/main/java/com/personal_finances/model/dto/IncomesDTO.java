@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @Data
 @Builder
@@ -22,7 +21,7 @@ public class IncomesDTO {
     private String description;
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private Date date;
+    private String date;
 
     @NotNull
     private Accounts account;

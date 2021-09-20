@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Data
@@ -17,7 +16,7 @@ public class Incomes {
     private Long id;
     private Double value;
     private String description;
-    private Date date;
+    private String date;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
