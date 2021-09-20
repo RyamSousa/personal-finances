@@ -18,6 +18,8 @@ public class AccountsDTO {
     private Long id;
     @NotNull
     private Long accountNumber;
+    @NotNull
+    private String financialInstitution;
     private Double balance;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDateTime createDate;

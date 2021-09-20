@@ -81,7 +81,7 @@ public class UsersService {
             throw new BusinessException(MessagesExceptions.USER_NOT_FOUND);
         }
 
-        return mapperUsers.optionaltoDto(optionalUser);
+        return mapperUsers.optionalToDto(optionalUser);
     }
 
     @Transactional(readOnly = true)
@@ -90,7 +90,7 @@ public class UsersService {
         UsersDTO dto = null;
 
         if (optionalUser.isPresent()){
-            dto = mapperUsers.optionaltoDto(optionalUser);
+            dto = mapperUsers.optionalToDto(optionalUser);
         }
 
         return dto;

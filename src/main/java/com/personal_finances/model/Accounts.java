@@ -16,6 +16,7 @@ public class Accounts {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_account")
     private Long id;
     private Long accountNumber;
+    private String financialInstitution;
     private Double balance;
     private LocalDateTime createDate;
 

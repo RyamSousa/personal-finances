@@ -5,19 +5,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Expenditures {
+public class Incomes {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_expenditure")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_revenue")
     private Long id;
     private Double value;
     private String description;
-    private LocalDate date;
+    private String date;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

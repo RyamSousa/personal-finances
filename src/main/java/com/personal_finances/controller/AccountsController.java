@@ -1,11 +1,9 @@
 package com.personal_finances.controller;
 
 import com.personal_finances.model.dto.AccountsDTO;
-import com.personal_finances.model.dto.CategoriesDTO;
-import com.personal_finances.model.dto.ExpendituresDTO;
-import com.personal_finances.model.dto.RevenuesDTO;
+import com.personal_finances.model.dto.ExpensesDTO;
+import com.personal_finances.model.dto.IncomesDTO;
 import com.personal_finances.service.AccountsService;
-import com.personal_finances.service.CategoriesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -64,15 +62,15 @@ public class AccountsController {
         return ResponseEntity.ok(serviceAccounts.findAllAccounts());
     }
     @ApiOperation("Busca todas as receitas de uma conta")
-    @GetMapping(value = "/revenues/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<RevenuesDTO>> findAllRevenuesByAccount(@PathVariable Long id){
-        return ResponseEntity.ok(serviceAccounts.findAllRevenuesByAccount(id));
+    @GetMapping(value = "/incomes/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<IncomesDTO>> findAllIncomesByAccount(@PathVariable Long id){
+        return ResponseEntity.ok(serviceAccounts.findAllIncomesByAccount(id));
     }
 
     @ApiOperation("Busca todas as despesas de uma conta")
-    @GetMapping(value = "/expenditures/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ExpendituresDTO>> findAllExpendituresByAccount(@PathVariable Long id){
-        return ResponseEntity.ok(serviceAccounts.findAllExpendituresByAccount(id));
+    @GetMapping(value = "/expenses/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ExpensesDTO>> findAllExpensesByAccount(@PathVariable Long id){
+        return ResponseEntity.ok(serviceAccounts.findAllExpensesByAccount(id));
     }
 
 

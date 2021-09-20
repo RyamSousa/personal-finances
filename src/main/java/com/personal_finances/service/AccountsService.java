@@ -1,18 +1,18 @@
 package com.personal_finances.service;
 
 import com.personal_finances.exceptions.BusinessException;
-import com.personal_finances.mapper.ExpendituresMapper;
-import com.personal_finances.mapper.RevenuesMapper;
+import com.personal_finances.mapper.ExpensesMapper;
+import com.personal_finances.mapper.IncomesMapper;
 import com.personal_finances.mapper.UsersMapper;
 import com.personal_finances.model.Accounts;
 import com.personal_finances.model.dto.AccountsDTO;
-import com.personal_finances.model.dto.ExpendituresDTO;
-import com.personal_finances.model.dto.RevenuesDTO;
+import com.personal_finances.model.dto.ExpensesDTO;
+import com.personal_finances.model.dto.IncomesDTO;
 import com.personal_finances.model.dto.UsersDTO;
 import com.personal_finances.repository.AccountsRepository;
 import com.personal_finances.mapper.AccountMapper;
-import com.personal_finances.repository.ExpendituresRepository;
-import com.personal_finances.repository.RevenuesRepository;
+import com.personal_finances.repository.ExpensesRepository;
+import com.personal_finances.repository.IncomesRepository;
 import com.personal_finances.utils.GetDate;
 import com.personal_finances.utils.MessagesExceptions;
 import lombok.AllArgsConstructor;
@@ -34,11 +34,11 @@ public class AccountsService {
     private final UsersService usersService;
     private final UsersMapper usersMapper;
 
-    private final RevenuesRepository revenuesRepository;
-    private final RevenuesMapper revenuesMapper;
+    private final IncomesRepository incomesRepository;
+    private final IncomesMapper incomesMapper;
 
-    private final ExpendituresRepository expendituresRepository;
-    private final ExpendituresMapper expendituresMapper;
+    private final ExpensesRepository expensesRepository;
+    private final ExpensesMapper expensesMapper;
 
     @Transactional
     public AccountsDTO save(AccountsDTO dto){
@@ -93,17 +93,17 @@ public class AccountsService {
 
         AccountsDTO accountValidation = this.findById(id);
 
-        List<RevenuesDTO> revenues = this.findAllRevenuesByAccount(accountValidation.getId());
-        List<ExpendituresDTO> expenditures = this.findAllExpendituresByAccount(accountValidation.getId());
+        List<IncomesDTO> incomes = this.findAllIncomesByAccount(accountValidation.getId());
+        List<ExpensesDTO> expenses = this.findAllExpensesByAccount(accountValidation.getId());
 
-        if (!revenues.isEmpty()){
-            for (RevenuesDTO re: revenues) {
-                revenuesRepository.deleteById(re.getId());
+        if (!incomes.isEmpty()){
+            for (IncomesDTO re: incomes) {
+                incomesRepository.deleteById(re.getId());
             }
         }
-        if (!expenditures.isEmpty()){
-            for (ExpendituresDTO ex: expenditures) {
-                expendituresRepository.deleteById(ex.getId());
+        if (!expenses.isEmpty()){
+            for (ExpensesDTO ex: expenses) {
+                expensesRepository.deleteById(ex.getId());
             }
         }
 
@@ -144,19 +144,19 @@ public class AccountsService {
     }
 
     @Transactional
-    public List<RevenuesDTO> findAllRevenuesByAccount(Long id){
+    public List<IncomesDTO> findAllIncomesByAccount(Long id){
 
-        List<RevenuesDTO> lst = repository.findAllRevenuesByAccount(id)
-                .stream().map(revenuesMapper::optionaltoDto).collect(Collectors.toList());
+        List<IncomesDTO> lst = repository.findAllIncomesByAccount(id)
+                .stream().map(incomesMapper::optionalToDto).collect(Collectors.toList());
 
         return lst;
     }
 
     @Transactional
-    public List<ExpendituresDTO> findAllExpendituresByAccount(Long id){
+    public List<ExpensesDTO> findAllExpensesByAccount(Long id){
 
-        List<ExpendituresDTO> lst = repository.findAllExpendituresByAccount(id)
-                .stream().map(expendituresMapper::optionaltoDto).collect(Collectors.toList());
+        List<ExpensesDTO> lst = repository.findAllExpensesByAccount(id)
+                .stream().map(expensesMapper::optionalToDto).collect(Collectors.toList());
 
         return lst;
     }
