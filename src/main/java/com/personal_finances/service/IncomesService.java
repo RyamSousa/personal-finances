@@ -3,15 +3,11 @@ package com.personal_finances.service;
 import com.personal_finances.exceptions.BusinessException;
 import com.personal_finances.mapper.AccountMapper;
 import com.personal_finances.mapper.CategoriesMapper;
-import com.personal_finances.mapper.ExpendituresMapper;
-import com.personal_finances.mapper.RevenuesMapper;
+import com.personal_finances.mapper.IncomesMapper;
 import com.personal_finances.model.Categories;
-import com.personal_finances.model.Expenditures;
-import com.personal_finances.model.Revenues;
+import com.personal_finances.model.Incomes;
 import com.personal_finances.model.dto.AccountsDTO;
-import com.personal_finances.model.dto.ExpendituresDTO;
-import com.personal_finances.model.dto.RevenuesDTO;
-import com.personal_finances.repository.ExpendituresRepository;
+import com.personal_finances.model.dto.IncomesDTO;
 import com.personal_finances.repository.RevenuesRepository;
 import com.personal_finances.utils.MessagesExceptions;
 import lombok.AllArgsConstructor;
@@ -25,10 +21,10 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class ExpendituresService {
+public class IncomesService {
 
-    private final ExpendituresRepository repository;
-    private final ExpendituresMapper mapperExpenditure;
+    private final RevenuesRepository repository;
+    private final IncomesMapper mapperRevenue;
 
     private final CategoriesService categoriesService;
     private final CategoriesMapper categoriesMapper;
@@ -37,7 +33,7 @@ public class ExpendituresService {
     private final AccountMapper accountMapper;
 
     @Transactional
-    public ExpendituresDTO save(ExpendituresDTO dto){
+    public IncomesDTO save(IncomesDTO dto){
 
         AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
 
@@ -48,14 +44,14 @@ public class ExpendituresService {
         dto.setCategory(category);
         dto.setAccount(accountMapper.toAccounts(account));
 
-        Expenditures expenditure = mapperExpenditure.toExpenditure(dto);
-        repository.save(expenditure);
+        Incomes revenue = mapperRevenue.toRevenue(dto);
+        repository.save(revenue);
 
-        return mapperExpenditure.toDto(expenditure);
+        return mapperRevenue.toDto(revenue);
     }
 
     @Transactional
-    public ExpendituresDTO update(ExpendituresDTO dto){
+    public IncomesDTO update(IncomesDTO dto){
 
         AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
 
@@ -66,17 +62,17 @@ public class ExpendituresService {
         dto.setCategory(category);
         dto.setAccount(accountMapper.toAccounts(account));
 
-        Expenditures expenditure = mapperExpenditure.toExpenditure(dto);
-        expenditure.setId(dto.getId());
+        Incomes revenue = mapperRevenue.toRevenue(dto);
+        revenue.setId(dto.getId());
 
-        repository.save(expenditure);
+        repository.save(revenue);
 
-        return mapperExpenditure.toDto(expenditure);
+        return mapperRevenue.toDto(revenue);
     }
 
     @Transactional
-    public ExpendituresDTO delete(Long id){
-        ExpendituresDTO dto = this.findById(id);
+    public IncomesDTO delete(Long id){
+        IncomesDTO dto = this.findById(id);
 
         repository.deleteById(id);
 
@@ -84,32 +80,33 @@ public class ExpendituresService {
     }
 
     @Transactional(readOnly = true)
-    public ExpendituresDTO findById(Long id){
-        Optional<Expenditures> optionalExpenditure = repository.findById(id);
+    public IncomesDTO findById(Long id){
+        Optional<Incomes> optionalRevenue = repository.findById(id);
 
-        if (optionalExpenditure.isEmpty()) {
+        if (optionalRevenue.isEmpty()) {
             throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
         }
 
-        return mapperExpenditure.optionaltoDto(optionalExpenditure);
+        return mapperRevenue.optionaltoDto(optionalRevenue);
     }
 
     @Transactional(readOnly = true)
-    public List<ExpendituresDTO> findByCategory(Long id){
-        List<Optional<Expenditures>> optionalExpenditure = repository.findByCategory(id);
+    public List<IncomesDTO> findByCategory(Long id){
+        List<Optional<Incomes>> optionalRevenue = repository.findByCategory(id);
 
-        if (optionalExpenditure.isEmpty()){
+        if (optionalRevenue.isEmpty()){
             throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
         }
 
-        return optionalExpenditure.stream()
-                .map(mapperExpenditure::optionaltoDto)
+        return optionalRevenue.stream()
+                .map(mapperRevenue::optionaltoDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<ExpendituresDTO> findAllExpenditures(){
-        List<ExpendituresDTO> lst = mapperExpenditure.toListDTO(repository.findAll());
+    public List<IncomesDTO> findAllRevenues(){
+
+        List<IncomesDTO> lst = mapperRevenue.toListDTO(repository.findAll());
 
         if (lst.isEmpty()){
             throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);

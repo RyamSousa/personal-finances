@@ -1,7 +1,7 @@
 package com.personal_finances.mapper;
 
-import com.personal_finances.model.Revenues;
-import com.personal_finances.model.dto.RevenuesDTO;
+import com.personal_finances.model.Incomes;
+import com.personal_finances.model.dto.IncomesDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,10 +9,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class RevenuesMapper {
+public class IncomesMapper {
 
-    public RevenuesDTO toDto(Revenues revenue) {
-        RevenuesDTO dto = new RevenuesDTO();
+    public IncomesDTO toDto(Incomes revenue) {
+        IncomesDTO dto = new IncomesDTO();
 
         dto.setId(revenue.getId());
         dto.setValue(revenue.getValue());
@@ -24,8 +24,8 @@ public class RevenuesMapper {
         return dto;
     }
 
-    public RevenuesDTO optionaltoDto(Optional<Revenues> revenue) {
-        RevenuesDTO dto = new RevenuesDTO();
+    public IncomesDTO optionaltoDto(Optional<Incomes> revenue) {
+        IncomesDTO dto = new IncomesDTO();
 
         dto.setId(revenue.get().getId());
         dto.setValue(revenue.get().getValue());
@@ -37,8 +37,8 @@ public class RevenuesMapper {
         return dto;
     }
 
-    public Revenues toRevenue(RevenuesDTO dto) {
-        Revenues revenue = new Revenues();
+    public Incomes toRevenue(IncomesDTO dto) {
+        Incomes revenue = new Incomes();
 
         revenue.setId(dto.getId());
         revenue.setValue(dto.getValue());
@@ -50,7 +50,7 @@ public class RevenuesMapper {
         return revenue;
     }
 
-    public List<RevenuesDTO> toListDTO(List<Revenues> list) {
+    public List<IncomesDTO> toListDTO(List<Incomes> list) {
         return list.stream().map(this::toDto).collect(Collectors.toList());
     }
 }

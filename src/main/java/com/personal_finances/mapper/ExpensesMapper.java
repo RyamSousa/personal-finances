@@ -1,9 +1,7 @@
 package com.personal_finances.mapper;
 
-import com.personal_finances.model.Expenditures;
-import com.personal_finances.model.Revenues;
-import com.personal_finances.model.dto.ExpendituresDTO;
-import com.personal_finances.model.dto.RevenuesDTO;
+import com.personal_finances.model.Expenses;
+import com.personal_finances.model.dto.ExpensesDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,10 +9,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class ExpendituresMapper {
+public class ExpensesMapper {
 
-    public ExpendituresDTO toDto(Expenditures expenditure) {
-        ExpendituresDTO dto = new ExpendituresDTO();
+    public ExpensesDTO toDto(Expenses expenditure) {
+        ExpensesDTO dto = new ExpensesDTO();
 
         dto.setId(expenditure.getId());
         dto.setValue(expenditure.getValue());
@@ -26,8 +24,8 @@ public class ExpendituresMapper {
         return dto;
     }
 
-    public ExpendituresDTO optionaltoDto(Optional<Expenditures> expenditure) {
-        ExpendituresDTO dto = new ExpendituresDTO();
+    public ExpensesDTO optionaltoDto(Optional<Expenses> expenditure) {
+        ExpensesDTO dto = new ExpensesDTO();
 
         dto.setId(expenditure.get().getId());
         dto.setValue(expenditure.get().getValue());
@@ -39,8 +37,8 @@ public class ExpendituresMapper {
         return dto;
     }
 
-    public Expenditures toExpenditure(ExpendituresDTO dto) {
-        Expenditures expenditure = new Expenditures();
+    public Expenses toExpenditure(ExpensesDTO dto) {
+        Expenses expenditure = new Expenses();
 
         expenditure.setId(dto.getId());
         expenditure.setValue(dto.getValue());
@@ -52,7 +50,7 @@ public class ExpendituresMapper {
         return expenditure;
     }
 
-    public List<ExpendituresDTO> toListDTO(List<Expenditures> list) {
+    public List<ExpensesDTO> toListDTO(List<Expenses> list) {
         return list.stream().map(this::toDto).collect(Collectors.toList());
     }
 }

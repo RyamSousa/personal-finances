@@ -1,9 +1,7 @@
 package com.personal_finances.controller;
 
-import com.personal_finances.model.dto.CategoriesDTO;
-import com.personal_finances.model.dto.RevenuesDTO;
-import com.personal_finances.service.CategoriesService;
-import com.personal_finances.service.RevenuesService;
+import com.personal_finances.model.dto.IncomesDTO;
+import com.personal_finances.service.IncomesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -20,43 +18,43 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(value = "/revenues")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class RevenuesController {
+public class IncomesController {
 
-    private final RevenuesService serviceRevenue;
+    private final IncomesService serviceRevenue;
 
     @ApiOperation("Cria uma nova receita")
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<RevenuesDTO> save(@Valid @RequestBody RevenuesDTO dto){
+    public ResponseEntity<IncomesDTO> save(@Valid @RequestBody IncomesDTO dto){
         return ResponseEntity.ok(serviceRevenue.save(dto));
     }
 
     @ApiOperation("Atualiza uma receita")
     @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<RevenuesDTO> update(@Valid @RequestBody RevenuesDTO dto){
+    public ResponseEntity<IncomesDTO> update(@Valid @RequestBody IncomesDTO dto){
         return ResponseEntity.ok(serviceRevenue.update(dto));
     }
 
     @ApiOperation("Busca uma receita por id")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<RevenuesDTO> findById(@PathVariable Long id){
+    public ResponseEntity<IncomesDTO> findById(@PathVariable Long id){
         return ResponseEntity.ok(serviceRevenue.findById(id));
     }
 
     @ApiOperation("Busca uma receita por categoria")
     @GetMapping(value = "/category/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<RevenuesDTO>> findByCategory(@PathVariable Long id){
+    public ResponseEntity<List<IncomesDTO>> findByCategory(@PathVariable Long id){
         return ResponseEntity.ok(serviceRevenue.findByCategory(id));
     }
 
     @ApiOperation("Deleta uma receita por id")
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<RevenuesDTO> delete(@PathVariable Long id){
+    public ResponseEntity<IncomesDTO> delete(@PathVariable Long id){
         return ResponseEntity.ok(serviceRevenue.delete(id));
     }
 
     @ApiOperation("Busca todas as receitas")
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<RevenuesDTO>> findAllRevenues(){
+    public ResponseEntity<List<IncomesDTO>> findAllRevenues(){
         return ResponseEntity.ok(serviceRevenue.findAllRevenues());
     }
 }

@@ -1,8 +1,8 @@
 package com.personal_finances.repository;
 
 import com.personal_finances.model.Accounts;
-import com.personal_finances.model.Expenditures;
-import com.personal_finances.model.Revenues;
+import com.personal_finances.model.Expenses;
+import com.personal_finances.model.Incomes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -20,14 +20,14 @@ public interface AccountsRepository extends JpaRepository<Accounts, Long> {
     Optional<Accounts> findByAccountNumberUser(Long accountNumber, String cpf);
 
     @Query("SELECT re FROM Accounts ac " +
-            "INNER JOIN Revenues re ON (ac.id = re.account.id) " +
+            "INNER JOIN Incomes re ON (ac.id = re.account.id) " +
             "WHERE re.account.id = :id ")
-    List<Optional<Revenues>> findAllRevenuesByAccount(Long id);
+    List<Optional<Incomes>> findAllRevenuesByAccount(Long id);
 
     @Query("SELECT ex FROM Accounts ac " +
-            "INNER JOIN Expenditures ex ON (ac.id = ex.account.id) " +
+            "INNER JOIN Expenses ex ON (ac.id = ex.account.id) " +
             "WHERE ex.account.id = :id ")
-    List<Optional<Expenditures>> findAllExpendituresByAccount(Long id);
+    List<Optional<Expenses>> findAllExpendituresByAccount(Long id);
 
     Optional<Accounts> findByAccountNumber(Long accountNumber);
 
