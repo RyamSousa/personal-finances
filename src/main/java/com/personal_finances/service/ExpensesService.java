@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,12 +63,12 @@ public class ExpensesService {
         dto.setCategory(category);
         dto.setAccount(accountMapper.toAccounts(account));
 
-        Expenses expenditure = mapperExpenses.toExpenditure(dto);
-        expenditure.setId(dto.getId());
+        Expenses expense = mapperExpenses.toExpenditure(dto);
+        expense.setId(dto.getId());
 
-        repository.save(expenditure);
+        repository.save(expense);
 
-        return mapperExpenses.toDto(expenditure);
+        return mapperExpenses.toDto(expense);
     }
 
     @Transactional
@@ -83,25 +82,25 @@ public class ExpensesService {
 
     @Transactional(readOnly = true)
     public ExpensesDTO findById(Long id){
-        Optional<Expenses> optionalExpenditure = repository.findById(id);
+        Optional<Expenses> optionalExpenses = repository.findById(id);
 
-        if (optionalExpenditure.isEmpty()) {
+        if (optionalExpenses.isEmpty()) {
             throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
         }
 
-        return mapperExpenses.optionaltoDto(optionalExpenditure);
+        return mapperExpenses.optionalToDto(optionalExpenses);
     }
 
     @Transactional(readOnly = true)
     public List<ExpensesDTO> findByCategory(Long id){
-        List<Optional<Expenses>> optionalExpenditure = repository.findByCategory(id);
+        List<Optional<Expenses>> optionalExpenses = repository.findByCategory(id);
 
-        if (optionalExpenditure.isEmpty()){
+        if (optionalExpenses.isEmpty()){
             throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
         }
 
-        return optionalExpenditure.stream()
-                .map(mapperExpenses::optionaltoDto)
+        return optionalExpenses.stream()
+                .map(mapperExpenses::optionalToDto)
                 .collect(Collectors.toList());
     }
 
@@ -117,14 +116,13 @@ public class ExpensesService {
     }
 
     @Transactional
-    public List<ExpensesDTO> findExpensesByDate(String date, Long id){
+    public List<ExpensesDTO> findExpensesByDate(Long id, String date){
 
         date = GetDate.extractMonthAndYear(date);
 
         List<Optional<Expenses>> lst = repository.findExpensesByDate(id, date);
-        System.out.println("8888"+lst);
 
-        return lst.stream().map(mapperExpenses::optionaltoDto).collect(Collectors.toList());
+        return lst.stream().map(mapperExpenses::optionalToDto).collect(Collectors.toList());
     }
 
 }

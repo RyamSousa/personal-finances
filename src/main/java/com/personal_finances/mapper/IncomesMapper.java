@@ -11,43 +11,43 @@ import java.util.stream.Collectors;
 @Component
 public class IncomesMapper {
 
-    public IncomesDTO toDto(Incomes revenue) {
+    public IncomesDTO toDto(Incomes income) {
         IncomesDTO dto = new IncomesDTO();
 
-        dto.setId(revenue.getId());
-        dto.setValue(revenue.getValue());
-        dto.setDate(revenue.getDate());
-        dto.setDescription(revenue.getDescription());
-        dto.setAccount(revenue.getAccount());
-        dto.setCategory(revenue.getCategory());
+        dto.setId(income.getId());
+        dto.setValue(income.getValue());
+        dto.setDate(income.getDate());
+        dto.setDescription(income.getDescription());
+        dto.setAccount(income.getAccount());
+        dto.setCategory(income.getCategory());
 
         return dto;
     }
 
-    public IncomesDTO optionaltoDto(Optional<Incomes> revenue) {
+    public IncomesDTO optionalToDto(Optional<Incomes> income) {
         IncomesDTO dto = new IncomesDTO();
 
-        dto.setId(revenue.get().getId());
-        dto.setValue(revenue.get().getValue());
-        dto.setDate(revenue.get().getDate());
-        dto.setDescription(revenue.get().getDescription());
-        dto.setAccount(revenue.get().getAccount());
-        dto.setCategory(revenue.get().getCategory());
+        dto.setId(income.get().getId());
+        dto.setValue(income.get().getValue());
+        dto.setDate(income.get().getDate());
+        dto.setDescription(income.get().getDescription());
+        dto.setAccount(income.get().getAccount());
+        dto.setCategory(income.get().getCategory());
 
         return dto;
     }
 
     public Incomes toRevenue(IncomesDTO dto) {
-        Incomes revenue = new Incomes();
+        Incomes income = new Incomes();
 
-        revenue.setId(dto.getId());
-        revenue.setValue(dto.getValue());
-        revenue.setDate(dto.getDate());
-        revenue.setDescription(dto.getDescription());
-        revenue.setAccount(dto.getAccount());
-        revenue.setCategory(dto.getCategory());
+        income.setId(dto.getId());
+        income.setValue(dto.getValue());
+        income.setDate(dto.getDate());
+        income.setDescription(dto.getDescription());
+        income.setAccount(dto.getAccount());
+        income.setCategory(dto.getCategory());
 
-        return revenue;
+        return income;
     }
 
     public List<IncomesDTO> toListDTO(List<Incomes> list) {

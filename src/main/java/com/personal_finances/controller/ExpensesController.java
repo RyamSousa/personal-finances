@@ -22,42 +22,42 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class ExpensesController {
 
-    private final ExpensesService serviceExpenditures;
+    private final ExpensesService serviceExpenses;
 
     @ApiOperation("Cria uma nova despesa")
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ExpensesDTO> save(@Valid @RequestBody ExpensesDTO dto){
-        return ResponseEntity.ok(serviceExpenditures.save(dto));
+        return ResponseEntity.ok(serviceExpenses.save(dto));
     }
 
     @ApiOperation("Atualiza uma despesa")
     @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ExpensesDTO> update(@Valid @RequestBody ExpensesDTO dto){
-        return ResponseEntity.ok(serviceExpenditures.update(dto));
+        return ResponseEntity.ok(serviceExpenses.update(dto));
     }
 
     @ApiOperation("Busca uma despesa por id")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ExpensesDTO> findById(@PathVariable Long id){
-        return ResponseEntity.ok(serviceExpenditures.findById(id));
+        return ResponseEntity.ok(serviceExpenses.findById(id));
     }
 
     @ApiOperation("Busca uma despesa por categoria")
     @GetMapping(value = "/category/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ExpensesDTO>> findByCategory(@PathVariable Long id){
-        return ResponseEntity.ok(serviceExpenditures.findByCategory(id));
+        return ResponseEntity.ok(serviceExpenses.findByCategory(id));
     }
 
     @ApiOperation("Deleta uma despesa por id")
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ExpensesDTO> delete(@PathVariable Long id){
-        return ResponseEntity.ok(serviceExpenditures.delete(id));
+        return ResponseEntity.ok(serviceExpenses.delete(id));
     }
 
     @ApiOperation("Busca todas as despesas")
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ExpensesDTO>> findAllExpenditures(){
-        return ResponseEntity.ok(serviceExpenditures.findAllExpenses());
+        return ResponseEntity.ok(serviceExpenses.findAllExpenses());
     }
 
     @ApiOperation("Busca todas as despesas por mês e ano")
@@ -65,9 +65,6 @@ public class ExpensesController {
     public ResponseEntity<List<ExpensesDTO>> findExpensesByDate(
             @RequestParam(value = "date", defaultValue = "Expenses not found") String date,
             @PathVariable Long idAccount){
-        System.out.println(date);
-        System.out.println(GetDate.extractMonthAndYear(date));
-        System.out.println(idAccount);
-        return ResponseEntity.ok(serviceExpenditures.findExpensesByDate(date, idAccount));
+        return ResponseEntity.ok(serviceExpenses.findExpensesByDate(idAccount, date));
     }
 }

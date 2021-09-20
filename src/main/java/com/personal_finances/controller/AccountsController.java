@@ -69,8 +69,8 @@ public class AccountsController {
 
     @ApiOperation("Busca todas as despesas de uma conta")
     @GetMapping(value = "/expenses/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ExpensesDTO>> findAllExpendituresByAccount(@PathVariable Long id){
-        return ResponseEntity.ok(serviceAccounts.findAllExpendituresByAccount(id));
+    public ResponseEntity<List<ExpensesDTO>> findAllExpensesByAccount(@PathVariable Long id){
+        return ResponseEntity.ok(serviceAccounts.findAllExpensesByAccount(id));
     }
 
 

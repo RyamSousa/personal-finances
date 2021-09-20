@@ -22,12 +22,12 @@ public interface AccountsRepository extends JpaRepository<Accounts, Long> {
     @Query("SELECT re FROM Accounts ac " +
             "INNER JOIN Incomes re ON (ac.id = re.account.id) " +
             "WHERE re.account.id = :id ")
-    List<Optional<Incomes>> findAllRevenuesByAccount(Long id);
+    List<Optional<Incomes>> findAllIncomesByAccount(Long id);
 
     @Query("SELECT ex FROM Accounts ac " +
             "INNER JOIN Expenses ex ON (ac.id = ex.account.id) " +
             "WHERE ex.account.id = :id ")
-    List<Optional<Expenses>> findAllExpendituresByAccount(Long id);
+    List<Optional<Expenses>> findAllExpensesByAccount(Long id);
 
     Optional<Accounts> findByAccountNumber(Long accountNumber);
 

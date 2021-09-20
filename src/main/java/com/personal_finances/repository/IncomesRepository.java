@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RevenuesRepository extends JpaRepository<Incomes, Long> {
+public interface IncomesRepository extends JpaRepository<Incomes, Long> {
 
     @Query("SELECT re FROM Incomes re " +
             "WHERE re.category.id = :categoryId")

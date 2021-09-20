@@ -11,43 +11,43 @@ import java.util.stream.Collectors;
 @Component
 public class ExpensesMapper {
 
-    public ExpensesDTO toDto(Expenses expenditure) {
+    public ExpensesDTO toDto(Expenses expense) {
         ExpensesDTO dto = new ExpensesDTO();
 
-        dto.setId(expenditure.getId());
-        dto.setValue(expenditure.getValue());
-        dto.setDate(expenditure.getDate());
-        dto.setDescription(expenditure.getDescription());
-        dto.setAccount(expenditure.getAccount());
-        dto.setCategory(expenditure.getCategory());
+        dto.setId(expense.getId());
+        dto.setValue(expense.getValue());
+        dto.setDate(expense.getDate());
+        dto.setDescription(expense.getDescription());
+        dto.setAccount(expense.getAccount());
+        dto.setCategory(expense.getCategory());
 
         return dto;
     }
 
-    public ExpensesDTO optionaltoDto(Optional<Expenses> expenditure) {
+    public ExpensesDTO optionalToDto(Optional<Expenses> expense) {
         ExpensesDTO dto = new ExpensesDTO();
 
-        dto.setId(expenditure.get().getId());
-        dto.setValue(expenditure.get().getValue());
-        dto.setDate(expenditure.get().getDate());
-        dto.setDescription(expenditure.get().getDescription());
-        dto.setAccount(expenditure.get().getAccount());
-        dto.setCategory(expenditure.get().getCategory());
+        dto.setId(expense.get().getId());
+        dto.setValue(expense.get().getValue());
+        dto.setDate(expense.get().getDate());
+        dto.setDescription(expense.get().getDescription());
+        dto.setAccount(expense.get().getAccount());
+        dto.setCategory(expense.get().getCategory());
 
         return dto;
     }
 
     public Expenses toExpenditure(ExpensesDTO dto) {
-        Expenses expenditure = new Expenses();
+        Expenses expense = new Expenses();
 
-        expenditure.setId(dto.getId());
-        expenditure.setValue(dto.getValue());
-        expenditure.setDate(dto.getDate());
-        expenditure.setDescription(dto.getDescription());
-        expenditure.setAccount(dto.getAccount());
-        expenditure.setCategory(dto.getCategory());
+        expense.setId(dto.getId());
+        expense.setValue(dto.getValue());
+        expense.setDate(dto.getDate());
+        expense.setDescription(dto.getDescription());
+        expense.setAccount(dto.getAccount());
+        expense.setCategory(dto.getCategory());
 
-        return expenditure;
+        return expense;
     }
 
     public List<ExpensesDTO> toListDTO(List<Expenses> list) {

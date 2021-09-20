@@ -8,7 +8,7 @@ import com.personal_finances.model.Categories;
 import com.personal_finances.model.Incomes;
 import com.personal_finances.model.dto.AccountsDTO;
 import com.personal_finances.model.dto.IncomesDTO;
-import com.personal_finances.repository.RevenuesRepository;
+import com.personal_finances.repository.IncomesRepository;
 import com.personal_finances.utils.MessagesExceptions;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class IncomesService {
 
-    private final RevenuesRepository repository;
-    private final IncomesMapper mapperRevenue;
+    private final IncomesRepository repository;
+    private final IncomesMapper mapperIncome;
 
     private final CategoriesService categoriesService;
     private final CategoriesMapper categoriesMapper;
@@ -44,10 +44,10 @@ public class IncomesService {
         dto.setCategory(category);
         dto.setAccount(accountMapper.toAccounts(account));
 
-        Incomes revenue = mapperRevenue.toRevenue(dto);
-        repository.save(revenue);
+        Incomes income = mapperIncome.toRevenue(dto);
+        repository.save(income);
 
-        return mapperRevenue.toDto(revenue);
+        return mapperIncome.toDto(income);
     }
 
     @Transactional
@@ -62,12 +62,12 @@ public class IncomesService {
         dto.setCategory(category);
         dto.setAccount(accountMapper.toAccounts(account));
 
-        Incomes revenue = mapperRevenue.toRevenue(dto);
-        revenue.setId(dto.getId());
+        Incomes income = mapperIncome.toRevenue(dto);
+        income.setId(dto.getId());
 
-        repository.save(revenue);
+        repository.save(income);
 
-        return mapperRevenue.toDto(revenue);
+        return mapperIncome.toDto(income);
     }
 
     @Transactional
@@ -81,32 +81,32 @@ public class IncomesService {
 
     @Transactional(readOnly = true)
     public IncomesDTO findById(Long id){
-        Optional<Incomes> optionalRevenue = repository.findById(id);
+        Optional<Incomes> optionalIncome = repository.findById(id);
 
-        if (optionalRevenue.isEmpty()) {
+        if (optionalIncome.isEmpty()) {
             throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
         }
 
-        return mapperRevenue.optionaltoDto(optionalRevenue);
+        return mapperIncome.optionalToDto(optionalIncome);
     }
 
     @Transactional(readOnly = true)
     public List<IncomesDTO> findByCategory(Long id){
-        List<Optional<Incomes>> optionalRevenue = repository.findByCategory(id);
+        List<Optional<Incomes>> optionalIncomes = repository.findByCategory(id);
 
-        if (optionalRevenue.isEmpty()){
+        if (optionalIncomes.isEmpty()){
             throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
         }
 
-        return optionalRevenue.stream()
-                .map(mapperRevenue::optionaltoDto)
+        return optionalIncomes.stream()
+                .map(mapperIncome::optionalToDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<IncomesDTO> findAllRevenues(){
 
-        List<IncomesDTO> lst = mapperRevenue.toListDTO(repository.findAll());
+        List<IncomesDTO> lst = mapperIncome.toListDTO(repository.findAll());
 
         if (lst.isEmpty()){
             throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
