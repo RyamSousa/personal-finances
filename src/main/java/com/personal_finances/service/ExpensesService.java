@@ -12,6 +12,7 @@ import com.personal_finances.repository.ExpensesRepository;
 import com.personal_finances.utils.GetDate;
 import com.personal_finances.utils.MessagesExceptions;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
+@Slf4j
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class ExpensesService {
 
@@ -33,7 +36,6 @@ public class ExpensesService {
     private final AccountsService accountsService;
     private final AccountMapper accountMapper;
 
-    @Transactional
     public ExpensesDTO save(ExpensesDTO dto){
 
         AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
@@ -51,7 +53,6 @@ public class ExpensesService {
         return mapperExpenses.toDto(expenditure);
     }
 
-    @Transactional
     public ExpensesDTO update(ExpensesDTO dto){
 
         AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
@@ -71,7 +72,6 @@ public class ExpensesService {
         return mapperExpenses.toDto(expense);
     }
 
-    @Transactional
     public ExpensesDTO delete(Long id){
         ExpensesDTO dto = this.findById(id);
 
@@ -80,7 +80,6 @@ public class ExpensesService {
         return dto;
     }
 
-    @Transactional(readOnly = true)
     public ExpensesDTO findById(Long id){
         Optional<Expenses> optionalExpenses = repository.findById(id);
 
@@ -91,7 +90,6 @@ public class ExpensesService {
         return mapperExpenses.optionalToDto(optionalExpenses);
     }
 
-    @Transactional(readOnly = true)
     public List<ExpensesDTO> findByCategory(Long id){
         List<Optional<Expenses>> optionalExpenses = repository.findByCategory(id);
 
@@ -104,7 +102,6 @@ public class ExpensesService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
     public List<ExpensesDTO> findAllExpenses(){
         List<ExpensesDTO> lst = mapperExpenses.toListDTO(repository.findAll());
 
@@ -115,7 +112,6 @@ public class ExpensesService {
         return lst;
     }
 
-    @Transactional
     public List<ExpensesDTO> findExpensesByDate(Long id, String date){
 
         date = GetDate.extractMonthAndYear(date);

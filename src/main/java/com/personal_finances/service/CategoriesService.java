@@ -7,6 +7,7 @@ import com.personal_finances.model.dto.CategoriesDTO;
 import com.personal_finances.repository.CategoriesRepository;
 import com.personal_finances.utils.MessagesExceptions;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,13 +16,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
+@Slf4j
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class CategoriesService {
 
     private final CategoriesRepository repository;
     private final CategoriesMapper mapperCategory;
 
-    @Transactional
     public CategoriesDTO save(CategoriesDTO dto){
         Optional<Categories> optionalCategory = repository.findByName(dto.getName());
 
@@ -35,7 +37,6 @@ public class CategoriesService {
         return mapperCategory.toDto(category);
     }
 
-    @Transactional
     public CategoriesDTO delete(Long id){
         CategoriesDTO dto = this.findById(id);
 
@@ -44,7 +45,6 @@ public class CategoriesService {
         return dto;
     }
 
-    @Transactional(readOnly = true)
     public CategoriesDTO findById(Long id){
         Optional<Categories> optionalCategory = repository.findById(id);
 
@@ -55,7 +55,6 @@ public class CategoriesService {
         return mapperCategory.optionaltoDto(optionalCategory);
     }
 
-    @Transactional(readOnly = true)
     public List<CategoriesDTO> findAllCategories(){
 
         List<CategoriesDTO> lst = mapperCategory.toListDTO(repository.findAll());

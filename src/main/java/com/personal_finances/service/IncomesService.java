@@ -12,6 +12,7 @@ import com.personal_finances.repository.IncomesRepository;
 import com.personal_finances.utils.GetDate;
 import com.personal_finances.utils.MessagesExceptions;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
+@Slf4j
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class IncomesService {
 
@@ -33,7 +36,6 @@ public class IncomesService {
     private final AccountsService accountsService;
     private final AccountMapper accountMapper;
 
-    @Transactional
     public IncomesDTO save(IncomesDTO dto){
 
         AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
@@ -51,7 +53,6 @@ public class IncomesService {
         return mapperIncome.toDto(income);
     }
 
-    @Transactional
     public IncomesDTO update(IncomesDTO dto){
 
         AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
@@ -71,7 +72,6 @@ public class IncomesService {
         return mapperIncome.toDto(income);
     }
 
-    @Transactional
     public IncomesDTO delete(Long id){
         IncomesDTO dto = this.findById(id);
 
@@ -80,7 +80,6 @@ public class IncomesService {
         return dto;
     }
 
-    @Transactional(readOnly = true)
     public IncomesDTO findById(Long id){
         Optional<Incomes> optionalIncome = repository.findById(id);
 
@@ -91,7 +90,6 @@ public class IncomesService {
         return mapperIncome.optionalToDto(optionalIncome);
     }
 
-    @Transactional(readOnly = true)
     public List<IncomesDTO> findByCategory(Long id){
         List<Optional<Incomes>> optionalIncomes = repository.findByCategory(id);
 
@@ -104,7 +102,6 @@ public class IncomesService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
     public List<IncomesDTO> findAllIncomes(){
 
         List<IncomesDTO> lst = mapperIncome.toListDTO(repository.findAll());
@@ -116,7 +113,6 @@ public class IncomesService {
         return lst;
     }
 
-    @Transactional
     public List<IncomesDTO> findIncomesByDate(Long id, String date){
 
         date = GetDate.extractMonthAndYear(date);
