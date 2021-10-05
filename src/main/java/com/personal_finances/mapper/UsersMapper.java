@@ -21,7 +21,7 @@ public class UsersMapper {
         return dto;
     }
 
-    public UsersDTO optionaltoDto(Optional<Users> user) {
+    public UsersDTO optionalToDto(Optional<Users> user) {
         UsersDTO dto = new UsersDTO();
 
         dto.setId(user.get().getId());

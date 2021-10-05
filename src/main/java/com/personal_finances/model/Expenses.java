@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 import static javax.persistence.GenerationType.*;
 
@@ -13,13 +12,13 @@ import static javax.persistence.GenerationType.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Revenues {
+public class Expenses {
     @Id
-    @GeneratedValue(strategy = AUTO, generator = "id_revenue")
+    @GeneratedValue(strategy = AUTO, generator = "id_expenditure")
     private Long id;
     private Double value;
     private String description;
-    private LocalDate date;
+    private String date;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

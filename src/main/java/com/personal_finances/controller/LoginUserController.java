@@ -44,17 +44,17 @@ public class LoginUserController {
     public ResponseEntity<LoginUser> saveLogin(@RequestBody LoginUser loginUser){
         return ResponseEntity.ok(loginService.save(loginUser));
     }
-
+/*
     @PostMapping(value = "/role", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<LoginUser> addRoleToLogin(@RequestBody FormRoleToLogin form){
         LoginUser loginUser = loginService.addRoleToLogin(form.getUsername(), form.getRoleName());
         return ResponseEntity.ok(loginUser);
-    }
+    }*/
 
     @GetMapping(value = "/token/refresh", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<LoginUser> refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
-
+/*
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
             try {
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
@@ -92,8 +92,7 @@ public class LoginUserController {
             }
         }else {
             throw new RuntimeException("Refresh token is missing");
-        }
-
+        }*/
         return ResponseEntity.ok().build();
     }
 /*

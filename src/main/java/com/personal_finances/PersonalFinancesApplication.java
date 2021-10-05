@@ -32,7 +32,7 @@ public class PersonalFinancesApplication {
 			roleService.save(new Role(null, "ROLE_MANAGER"));
 			roleService.save(new Role(null, "ROLE_ADMIN"));
 			roleService.save(new Role(null, "ROLE_SUPER_ADMIN"));
-
+/*
 			loginService.save(new LoginUser(null, "ryam", "1234", new ArrayList<>()));
 			loginService.save(new LoginUser(null, "sousa", "123", new ArrayList<>()));
 			loginService.save(new LoginUser(null, "alves", "12", new ArrayList<>()));
@@ -45,7 +45,7 @@ public class PersonalFinancesApplication {
 			loginService.addRoleToLogin("alves", "ROLE_USER");
 			loginService.addRoleToLogin("alves", "ROLE_ADMIN");
 
-			loginService.addRoleToLogin("sousa", "ROLE_USER");
+			loginService.addRoleToLogin("sousa", "ROLE_USER");*/
 		};
 	}
 }
