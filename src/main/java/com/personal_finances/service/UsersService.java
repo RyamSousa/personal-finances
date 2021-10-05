@@ -10,6 +10,7 @@ import com.personal_finances.repository.AccountsRepository;
 import com.personal_finances.repository.UsersRepository;
 import com.personal_finances.utils.MessagesExceptions;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
+@Slf4j
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UsersService {
 
@@ -28,7 +31,6 @@ public class UsersService {
     private final AccountsRepository accountsRepository;
     private final AccountMapper accountMapper;
 
-    @Transactional
     public UsersDTO save(UsersDTO dto){
         UsersDTO userValidation = this.findByCpf(dto.getCpf());
 
@@ -42,7 +44,6 @@ public class UsersService {
         return mapperUsers.toDto(user);
     }
 
-    @Transactional
     public UsersDTO update(UsersDTO dto){
         UsersDTO userValidation = this.findByCpf(dto.getCpf());
 
@@ -58,7 +59,6 @@ public class UsersService {
         return mapperUsers.toDto(user);
     }
 
-    @Transactional
     public UsersDTO delete(Long id){
         UsersDTO userValidation = this.findById(id);
 
@@ -73,7 +73,6 @@ public class UsersService {
         return userValidation;
     }
 
-    @Transactional(readOnly = true)
     public UsersDTO findById(Long id){
         Optional<Users> optionalUser = repository.findById(id);
 
@@ -84,7 +83,6 @@ public class UsersService {
         return mapperUsers.optionalToDto(optionalUser);
     }
 
-    @Transactional(readOnly = true)
     public UsersDTO findByCpf(String cpf){
         Optional<Users> optionalUser = repository.findByCpf(cpf);
         UsersDTO dto = null;
@@ -96,7 +94,6 @@ public class UsersService {
         return dto;
     }
 
-    @Transactional(readOnly = true)
     public List<UsersDTO> findAllUsers(){
         List<UsersDTO> lst = mapperUsers.toListDTO(repository.findAll());;
 
@@ -107,7 +104,6 @@ public class UsersService {
         return lst;
     }
 
-    @Transactional
     public List<AccountsDTO> findAllAccountsByUser(Long id) {
 
         List<AccountsDTO> lst = repository.findAllAccountsByUser(id)
