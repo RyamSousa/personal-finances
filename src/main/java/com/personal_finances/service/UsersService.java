@@ -8,6 +8,7 @@ import com.personal_finances.model.dto.UsersDTO;
 import com.personal_finances.repository.AccountsRepository;
 import com.personal_finances.repository.UsersRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,15 +17,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@Transactional
+@RequiredArgsConstructor
 public class UsersService {
 
     private final UsersRepository repository;
     private final UsersMapper mapperUsers;
     private final AccountsRepository accountsRepository;
     private final AccountMapper accountMapper;
-
-    @Transactional
     public UsersDTO save(UsersDTO dto){
         UsersDTO userValidation = this.findByCpf(dto.getCpf());
 
@@ -37,7 +37,6 @@ public class UsersService {
         return mapperUsers.toDto(user);
     }
 
-    @Transactional
     public UsersDTO delete(Long id){
         UsersDTO userValidation = this.findById(id);
 
@@ -52,18 +51,16 @@ public class UsersService {
         return userValidation;
     }
 
-    @Transactional(readOnly = true)
     public UsersDTO findById(Long id){
         Optional<Users> optionalUser = repository.findById(id);
 
         if (optionalUser.isEmpty()) {
-            System.out.println("Usuário não existe");
+            throw new RuntimeException("User not found");
         }
 
         return mapperUsers.optionaltoDto(optionalUser);
     }
 
-    @Transactional(readOnly = true)
     public UsersDTO findByCpf(String cpf){
         Optional<Users> optionalUser = repository.findByCpf(cpf);
         UsersDTO dto = null;
@@ -75,7 +72,6 @@ public class UsersService {
         return dto;
     }
 
-    @Transactional(readOnly = true)
     public List<UsersDTO> findAllUsers(){
         return mapperUsers.toListDTO(repository.findAll());
     }

@@ -5,10 +5,11 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.personal_finances_security.model.FormRoleToLogin;
-import com.personal_finances_security.model.LoginUser;
-import com.personal_finances_security.model.Role;
-import com.personal_finances_security.service.LoginService;
+import com.personal_finances.model.LoginUser;
+import com.personal_finances.model.Role;
+import com.personal_finances.service.LoginUserService;
+
+import com.personal_finances.utils.FormRoleToLogin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +27,13 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@RestController
-@RequestMapping("/api")
-@RequiredArgsConstructor
-public class LoginController {
 
-    private final LoginService loginService;
+@RestController
+@RequestMapping("/api/login/user")
+@RequiredArgsConstructor
+public class LoginUserController {
+
+    private final LoginUserService loginService;
 
     @GetMapping(value = "/users", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<LoginUser>> findAllLogins(){

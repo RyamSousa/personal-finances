@@ -1,7 +1,7 @@
 package com.personal_finances.controller;
 
-import com.personal_finances_security.model.Role;
-import com.personal_finances_security.service.RoleService;
+import com.personal_finances.model.Role;
+import com.personal_finances.service.RoleService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

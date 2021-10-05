@@ -1,12 +1,15 @@
 package com.personal_finances;
 
-import com.personal_finances.service.LoginService;
+import com.personal_finances.model.LoginUser;
+import com.personal_finances.model.Role;
+import com.personal_finances.service.LoginUserService;
 import com.personal_finances.service.RoleService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 
@@ -23,7 +26,7 @@ public class PersonalFinancesApplication {
 	}
 
 	@Bean
-	CommandLineRunner run(RoleService roleService, LoginService loginService){
+	CommandLineRunner run(RoleService roleService, LoginUserService loginService){
 		return args -> {
 			roleService.save(new Role(null, "ROLE_USER"));
 			roleService.save(new Role(null, "ROLE_MANAGER"));

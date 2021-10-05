@@ -1,9 +1,9 @@
 package com.personal_finances.service;
 
-import com.personal_finances_security.model.LoginUser;
-import com.personal_finances_security.model.Role;
-import com.personal_finances_security.repository.LoginRepository;
-import com.personal_finances_security.repository.RoleRepository;
+import com.personal_finances.model.LoginUser;
+import com.personal_finances.model.Role;
+import com.personal_finances.repository.LoginRepository;
+import com.personal_finances.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,7 +23,7 @@ import java.util.List;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
-public class LoginService implements UserDetailsService {
+public class LoginUserService implements UserDetailsService {
 
     private final LoginRepository loginRepository;
     private final RoleRepository roleRepository;
