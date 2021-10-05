@@ -7,13 +7,15 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.GenerationType.*;
+
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Accounts {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_account")
+    @GeneratedValue(strategy = AUTO, generator = "id_account")
     private Long id;
     private Long accountNumber;
     private Double balance;
