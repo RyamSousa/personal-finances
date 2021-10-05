@@ -15,7 +15,7 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/api/users")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UsersController {
 

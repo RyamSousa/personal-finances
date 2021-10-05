@@ -13,7 +13,7 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "/categories")
+@RequestMapping(value = "/api/categories")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class CategoriesController {
 
