@@ -6,8 +6,7 @@ import com.personal_finances.model.dto.IncomesDTO;
 import com.personal_finances.service.AccountsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +18,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Api("Retorna dados das contas dos usuários")
 @RestController
 @RequestMapping(value = "/api/accounts")
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class AccountsController {
 
     private final AccountsService serviceAccounts;

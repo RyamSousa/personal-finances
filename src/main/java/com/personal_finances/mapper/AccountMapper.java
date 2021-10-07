@@ -22,7 +22,7 @@ public class AccountMapper {
         return dto;
     }
 
-    public AccountsDTO optionaltoDto(Optional<Accounts> account) {
+    public AccountsDTO optionalToDto(Optional<Accounts> account) {
         AccountsDTO dto = new AccountsDTO();
 
         dto.setId(account.get().getId());

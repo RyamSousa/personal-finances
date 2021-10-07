@@ -10,10 +10,7 @@ import com.personal_finances.model.dto.AccountsDTO;
 import com.personal_finances.model.dto.IncomesDTO;
 import com.personal_finances.repository.IncomesRepository;
 import com.personal_finances.utils.GetDate;
-import com.personal_finances.utils.MessagesExceptions;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +18,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.personal_finances.utils.MessagesExceptions.*;
+
 @Service
 @Transactional
-@Slf4j
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class IncomesService {
 
     private final IncomesRepository repository;
@@ -84,7 +82,7 @@ public class IncomesService {
         Optional<Incomes> optionalIncome = repository.findById(id);
 
         if (optionalIncome.isEmpty()) {
-            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+            throw new BusinessException(NO_RECORDS_FOUND);
         }
 
         return mapperIncome.optionalToDto(optionalIncome);
@@ -94,7 +92,7 @@ public class IncomesService {
         List<Optional<Incomes>> optionalIncomes = repository.findByCategory(id);
 
         if (optionalIncomes.isEmpty()){
-            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+            throw new BusinessException(NO_RECORDS_FOUND);
         }
 
         return optionalIncomes.stream()
@@ -107,7 +105,7 @@ public class IncomesService {
         List<IncomesDTO> lst = mapperIncome.toListDTO(repository.findAll());
 
         if (lst.isEmpty()){
-            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+            throw new BusinessException(NO_RECORDS_FOUND);
         }
 
         return lst;

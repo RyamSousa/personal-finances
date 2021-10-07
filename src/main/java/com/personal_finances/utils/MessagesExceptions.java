@@ -5,5 +5,7 @@ public abstract class MessagesExceptions {
     public static final String NO_RECORDS_FOUND = "No records found";
     public static final String USER_NOT_FOUND = "User not found";
     public static final String ACCOUNT_NOT_FOUND = "Account not found";
+    public static final String ROLE_NOT_FOUND = "Role not found";
+    public static final String REFRESH_TOKEN_IS_MISSING = "Refresh token is missing";
 
 }

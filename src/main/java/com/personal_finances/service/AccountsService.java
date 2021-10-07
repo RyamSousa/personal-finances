@@ -14,11 +14,7 @@ import com.personal_finances.mapper.AccountMapper;
 import com.personal_finances.repository.ExpensesRepository;
 import com.personal_finances.repository.IncomesRepository;
 import com.personal_finances.utils.GetDate;
-import com.personal_finances.utils.MessagesExceptions;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +22,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.personal_finances.utils.MessagesExceptions.*;
+
 @Service
 @Transactional
-@Slf4j
 @RequiredArgsConstructor
 public class AccountsService {
 
@@ -48,19 +45,19 @@ public class AccountsService {
         UsersDTO user = usersService.findByCpf(dto.getUser().getCpf());
         Accounts account = null;
 
-        if(!(user == null)){
+        if(user != null){
             dto.setUser(usersMapper.toUsers(user));
             dto.setCreateDate(GetDate.getDateSystem());
             Optional<Accounts> optionalAccount = repository.findByAccountNumberUser(
                     dto.getAccountNumber(), dto.getUser().getCpf());
 
             if (optionalAccount.isPresent()){
-                throw new BusinessException(MessagesExceptions.ACCOUNT_NOT_FOUND);
+                throw new BusinessException(ACCOUNT_NOT_FOUND);
             }
             account = accountsMapper.toAccounts(dto);
             repository.save(account);
         }else {
-            throw new BusinessException(MessagesExceptions.USER_NOT_FOUND);
+            throw new BusinessException(USER_NOT_FOUND);
         }
 
         return accountsMapper.toDto(account);
@@ -76,7 +73,7 @@ public class AccountsService {
                     dto.getAccountNumber(), dto.getUser().getCpf());
 
             if (optionalAccount.isEmpty()){
-                throw new BusinessException(MessagesExceptions.ACCOUNT_NOT_FOUND);
+                throw new BusinessException(ACCOUNT_NOT_FOUND);
             }
             dto.setId(optionalAccount.get().getId());
             dto.setCreateDate(optionalAccount.get().getCreateDate());
@@ -84,7 +81,7 @@ public class AccountsService {
             account = accountsMapper.toAccounts(dto);
             repository.save(account);
         }else {
-            throw new BusinessException(MessagesExceptions.USER_NOT_FOUND);
+            throw new BusinessException(USER_NOT_FOUND);
         }
 
         return accountsMapper.toDto(account);
@@ -117,7 +114,7 @@ public class AccountsService {
         Optional<Accounts> optionalAccount = repository.findById(id);
 
         if (optionalAccount.isEmpty()) {
-            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+            throw new BusinessException(NO_RECORDS_FOUND);
         }
         return accountsMapper.optionaltoDto(optionalAccount);
     }
@@ -125,7 +122,7 @@ public class AccountsService {
     public AccountsDTO findByAccountNumber(Long accountNumber){
         Optional<Accounts> account = repository.findByAccountNumber(accountNumber);
         if(account.isEmpty()){
-            throw new BusinessException(MessagesExceptions.ACCOUNT_NOT_FOUND);
+            throw new BusinessException(ACCOUNT_NOT_FOUND);
         }
 
         return accountsMapper.optionaltoDto(account);
@@ -135,7 +132,7 @@ public class AccountsService {
         List<AccountsDTO> lst = accountsMapper.toListDTO(repository.findAll());
 
         if(lst.isEmpty()){
-            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+            throw new BusinessException(NO_RECORDS_FOUND);
         }
 
         return lst;
