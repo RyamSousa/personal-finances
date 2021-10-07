@@ -34,7 +34,6 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class LoginUserService implements UserDetailsService {
 
@@ -61,14 +60,16 @@ public class LoginUserService implements UserDetailsService {
         return new User(login.getUsername(), login.getPassword(), authorities);
     }
 
-    public LoginUserDTO save(LoginUser login){
+    public LoginUserDTO save(LoginUserDTO login){
         Optional<LoginUser> loginUser = loginRepository.findByUsername(login.getUsername());
 
-        if (loginUser.isPresent()){
-            throw new BusinessException(DATA_ALREADY_EXISTS);
+        if (loginUser.isPresent()) {
+            throw new BusinessException(USER_ALREADY_EXISTS);
         }
+
         login.setPassword(passwordEncoder.encode(login.getPassword()));
-        LoginUser save = loginRepository.save(login);
+        LoginUser save = loginRepository.save(loginUserMapper.toLoginUser(login));
+        this.addRoleToLogin(login.getUsername(), "ROLE_USER");
 
         return loginUserMapper.toDto(save);
     }
@@ -104,7 +105,17 @@ public class LoginUserService implements UserDetailsService {
         return loginUserMapper.optionalToDto(loginUser);
     }
 
-    public List<LoginUserDTO> findAllLongins(){
+    public LoginUserDTO findByUsername(LoginUser loginUser){
+        Optional<LoginUser> login = loginRepository.findByUsername(loginUser.getUsername());
+
+        if(login.isPresent()){
+            throw new BusinessException(USERNAME_ALREADY_EXISTS);
+        }
+
+        return loginUserMapper.toDto(loginUser);
+    }
+
+    public List<LoginUserDTO> findAllLongings(){
         return loginRepository.findAll()
                 .stream().map(loginUserMapper::toDto).collect(Collectors.toList());
     }
@@ -155,4 +166,7 @@ public class LoginUserService implements UserDetailsService {
         }
     }
 
+    public String passwordEncode(String password){
+        return passwordEncoder.encode(password);
+    }
 }

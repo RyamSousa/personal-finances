@@ -2,9 +2,11 @@ package com.personal_finances.service;
 
 import com.personal_finances.exceptions.BusinessException;
 import com.personal_finances.mapper.AccountMapper;
+import com.personal_finances.mapper.LoginUserMapper;
 import com.personal_finances.mapper.UsersMapper;
 import com.personal_finances.model.Users;
 import com.personal_finances.model.dto.AccountsDTO;
+import com.personal_finances.model.dto.LoginUserDTO;
 import com.personal_finances.model.dto.UsersDTO;
 import com.personal_finances.repository.AccountsRepository;
 import com.personal_finances.repository.UsersRepository;
@@ -29,6 +31,9 @@ public class UsersService {
     private final AccountsRepository accountsRepository;
     private final AccountMapper accountMapper;
 
+    private final LoginUserService loginUserService;
+    private final LoginUserMapper loginUserMapper;
+
     public UsersDTO save(UsersDTO dto){
         Optional<Users> user = repository.findByCpf(dto.getCpf());
 
@@ -36,7 +41,12 @@ public class UsersService {
             throw new BusinessException(DATA_ALREADY_EXISTS);
         }
 
-        Users save = repository.save(user.get());
+        loginUserService.findByUsername(dto.getLogin());
+
+        dto.getLogin().setPassword(loginUserService.passwordEncode(dto.getLogin().getPassword()));
+        System.out.println();
+        Users save = repository.save(mapperUsers.toUsers(dto));
+        loginUserService.addRoleToLogin(dto.getLogin().getUsername(), "ROLE_USER");
 
         return mapperUsers.toDto(save);
     }
@@ -44,12 +54,14 @@ public class UsersService {
     public UsersDTO update(UsersDTO dto){
         Optional<Users> user = repository.findByCpf(dto.getCpf());
 
-        if(user.isEmpty()){
-            throw new BusinessException(NO_RECORDS_FOUND);
+        if(user.isPresent()){
+            throw new BusinessException(DATA_ALREADY_EXISTS);
         }
 
-        dto.setId(user.get().getId());
+        LoginUserDTO login = loginUserService.save(loginUserMapper.toDto(dto.getLogin()));
+        dto.setLogin(loginUserMapper.toLoginUser(login));
 
+        dto.setId(user.get().getId());
         Users save = repository.save(mapperUsers.toUsers(dto));
 
         return mapperUsers.toDto(save);
@@ -102,7 +114,7 @@ public class UsersService {
     public List<AccountsDTO> findAllAccountsByUser(Long id) {
 
         List<AccountsDTO> lst = repository.findAllAccountsByUser(id)
-                .stream().map(accountMapper::optionaltoDto).collect(Collectors.toList());
+                .stream().map(accountMapper::optionalToDto).collect(Collectors.toList());
 
         if (lst.isEmpty()){
             throw new BusinessException(NO_RECORDS_FOUND);

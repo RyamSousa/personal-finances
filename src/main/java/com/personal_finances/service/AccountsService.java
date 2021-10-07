@@ -116,7 +116,7 @@ public class AccountsService {
         if (optionalAccount.isEmpty()) {
             throw new BusinessException(NO_RECORDS_FOUND);
         }
-        return accountsMapper.optionaltoDto(optionalAccount);
+        return accountsMapper.optionalToDto(optionalAccount);
     }
 
     public AccountsDTO findByAccountNumber(Long accountNumber){
@@ -125,7 +125,7 @@ public class AccountsService {
             throw new BusinessException(ACCOUNT_NOT_FOUND);
         }
 
-        return accountsMapper.optionaltoDto(account);
+        return accountsMapper.optionalToDto(account);
     }
 
     public List<AccountsDTO> findAllAccounts(){

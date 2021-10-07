@@ -1,6 +1,5 @@
 package com.personal_finances.controller;
 
-import com.personal_finances.model.LoginUser;
 import com.personal_finances.model.dto.LoginUserDTO;
 import com.personal_finances.service.LoginUserService;
 
@@ -24,21 +23,6 @@ public class LoginUserController {
 
     private final LoginUserService loginService;
 
-    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoginUserDTO> saveLogin(@RequestBody LoginUser loginUser){
-        return ResponseEntity.ok(loginService.save(loginUser));
-    }
-
-    @DeleteMapping
-    public ResponseEntity<LoginUserDTO> deleteLogin(@RequestBody LoginUser loginUser){
-        return ResponseEntity.ok(loginService.delete(loginUser.getUsername()));
-    }
-
-    @PostMapping(value = "/role", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoginUserDTO> addRoleToLogin(@RequestBody FormRoleToLogin form){
-        return ResponseEntity.ok(loginService.addRoleToLogin(form.getUsername(), form.getRoleName()));
-    }
-
     @GetMapping(value = "/token/refresh", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         loginService.refreshToken(request, response);
@@ -47,7 +31,7 @@ public class LoginUserController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<LoginUserDTO>> findAllLogins(){
-        return ResponseEntity.ok().body(loginService.findAllLongins());
+        return ResponseEntity.ok().body(loginService.findAllLongings());
     }
 
     @GetMapping(value = "/username", produces = APPLICATION_JSON_VALUE)
