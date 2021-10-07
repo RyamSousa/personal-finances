@@ -50,14 +50,14 @@ public class LoginUserService implements UserDetailsService {
         login.setPassword(passwordEncoder.encode(login.getPassword()));
 
         return loginRepository.save(login);
-    }/*
+    }
 
     public LoginUser delete(String username){
         LoginUser login = this.findByUsername(username);
         loginRepository.delete(login);
         return login;
-    }*/
-/*
+    }
+
     public LoginUser addRoleToLogin(String username, String roleName){
         LoginUser login = loginRepository.findByUsername(username);
         Role role = roleRepository.findByName(roleName);
@@ -65,10 +65,9 @@ public class LoginUserService implements UserDetailsService {
 
         return loginRepository.save(login);
     }
-*/
-   /* public LoginUser findByUsername(String username){
+    public LoginUser findByUsername(String username){
         return loginRepository.findByUsername(username);
-    }*/
+    }
 
     public List<LoginUser> findAllLongins(){
         return loginRepository.findAll();

@@ -21,18 +21,17 @@ public class RoleService {
     public Role save(Role role){
         return roleRepository.save(role);
     }
-/*
+
     public Role delete(String name){
         Role role = this.findByName(name);
         roleRepository.delete(role);
 
         return role;
-    }*/
-/*
-    public Role findByName(String name){
+    }
 
+    public Role findByName(String name){
         return roleRepository.findByName(name);
-    }*/
+    }
 
     public List<Role> findAllRoles(){
         return roleRepository.findAll();
