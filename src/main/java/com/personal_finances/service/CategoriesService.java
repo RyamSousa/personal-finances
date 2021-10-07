@@ -5,20 +5,18 @@ import com.personal_finances.mapper.CategoriesMapper;
 import com.personal_finances.model.Categories;
 import com.personal_finances.model.dto.CategoriesDTO;
 import com.personal_finances.repository.CategoriesRepository;
-import com.personal_finances.utils.MessagesExceptions;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+import static com.personal_finances.utils.MessagesExceptions.*;
+
 @Service
 @Transactional
-@Slf4j
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class CategoriesService {
 
     private final CategoriesRepository repository;
@@ -28,7 +26,7 @@ public class CategoriesService {
         Optional<Categories> optionalCategory = repository.findByName(dto.getName());
 
         if (optionalCategory.isPresent()){
-            throw new BusinessException(MessagesExceptions.DATA_ALREADY_EXISTS);
+            throw new BusinessException(DATA_ALREADY_EXISTS);
         }
 
         Categories category = mapperCategory.toCategories(dto);
@@ -49,7 +47,7 @@ public class CategoriesService {
         Optional<Categories> optionalCategory = repository.findById(id);
 
         if (optionalCategory.isEmpty()) {
-            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+            throw new BusinessException(NO_RECORDS_FOUND);
         }
 
         return mapperCategory.optionaltoDto(optionalCategory);
@@ -60,7 +58,7 @@ public class CategoriesService {
         List<CategoriesDTO> lst = mapperCategory.toListDTO(repository.findAll());
 
         if (lst.isEmpty()){
-            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+            throw new BusinessException(NO_RECORDS_FOUND);
         }
         return lst;
     }

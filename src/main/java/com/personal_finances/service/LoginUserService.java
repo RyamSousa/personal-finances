@@ -1,11 +1,18 @@
 package com.personal_finances.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.personal_finances.exceptions.BusinessException;
+import com.personal_finances.mapper.LoginUserMapper;
 import com.personal_finances.model.LoginUser;
 import com.personal_finances.model.Role;
+import com.personal_finances.model.dto.LoginUserDTO;
 import com.personal_finances.repository.LoginRepository;
 import com.personal_finances.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,26 +22,35 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.personal_finances.utils.MessagesExceptions.*;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Service
-@Transactional
-@Slf4j
 @RequiredArgsConstructor
 public class LoginUserService implements UserDetailsService {
 
     private final LoginRepository loginRepository;
+    private final LoginUserMapper loginUserMapper;
+
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       LoginUser login = null;// = this.findByUsername(username);
+       LoginUserDTO dto = this.findByUsername(username);
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        LoginUser login = loginUserMapper.toLoginUser(dto);
+
         login.getRoles().forEach(
                 role-> authorities.add(
                         new SimpleGrantedAuthority(role.getName())
@@ -44,34 +60,113 @@ public class LoginUserService implements UserDetailsService {
         return new User(login.getUsername(), login.getPassword(), authorities);
     }
 
-    public LoginUser save(LoginUser login){
-        log.info("New login {}", login.getUsername());
+    public LoginUserDTO save(LoginUserDTO login){
+        Optional<LoginUser> loginUser = loginRepository.findByUsername(login.getUsername());
+
+        if (loginUser.isPresent()) {
+            throw new BusinessException(USER_ALREADY_EXISTS);
+        }
 
         login.setPassword(passwordEncoder.encode(login.getPassword()));
+        LoginUser save = loginRepository.save(loginUserMapper.toLoginUser(login));
+        this.addRoleToLogin(login.getUsername(), "ROLE_USER");
 
-        return loginRepository.save(login);
+        return loginUserMapper.toDto(save);
     }
 
-    public LoginUser delete(String username){
-        LoginUser login = this.findByUsername(username);
-        loginRepository.delete(login);
+    public LoginUserDTO delete(String username){
+        LoginUserDTO login = this.findByUsername(username);
+
+        loginRepository.delete(loginUserMapper.toLoginUser(login));
+
         return login;
     }
 
-    public LoginUser addRoleToLogin(String username, String roleName){
-        LoginUser login = loginRepository.findByUsername(username);
-        Role role = roleRepository.findByName(roleName);
-        login.getRoles().add(role);
+    public LoginUserDTO addRoleToLogin(String username, String roleName){
+        LoginUserDTO login = this.findByUsername(username);
+        Optional<Role> role = roleRepository.findByName(roleName);
 
-        return loginRepository.save(login);
-    }
-    public LoginUser findByUsername(String username){
-        return loginRepository.findByUsername(username);
-    }
+        if (role.isEmpty()){
+            throw new BusinessException(ROLE_NOT_FOUND);
+        }
 
-    public List<LoginUser> findAllLongins(){
-        return loginRepository.findAll();
+        login.getRoles().add(role.get());
+
+        return login;
     }
 
+    public LoginUserDTO findByUsername(String username){
+        Optional<LoginUser> loginUser = loginRepository.findByUsername(username);
 
+        if(loginUser.isEmpty()){
+            throw new BusinessException(NO_RECORDS_FOUND);
+        }
+
+        return loginUserMapper.optionalToDto(loginUser);
+    }
+
+    public LoginUserDTO findByUsername(LoginUser loginUser){
+        Optional<LoginUser> login = loginRepository.findByUsername(loginUser.getUsername());
+
+        if(login.isPresent()){
+            throw new BusinessException(USERNAME_ALREADY_EXISTS);
+        }
+
+        return loginUserMapper.toDto(loginUser);
+    }
+
+    public List<LoginUserDTO> findAllLongings(){
+        return loginRepository.findAll()
+                .stream().map(loginUserMapper::toDto).collect(Collectors.toList());
+    }
+
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        List<Object> responseBody = new ArrayList<>();
+
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+
+        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
+            try {
+                String refresh_token = authorizationHeader.substring("Bearer ".length());
+                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                JWTVerifier verifier = JWT.require(algorithm).build();
+                DecodedJWT decodedJWT = verifier.verify(refresh_token);
+
+                String username = decodedJWT.getSubject();
+                LoginUserDTO dto = this.findByUsername(username);
+                LoginUser loginUser = loginUserMapper.toLoginUser(dto);
+
+                String access_token = JWT.create()
+                        .withSubject(loginUser.getUsername())
+                        .withExpiresAt(new Date(System.currentTimeMillis() + (10 * 60 * 1000)))
+                        .withIssuer(request.getRequestURL().toString())
+                        .withClaim("roles", loginUser.getRoles()
+                                .stream().map(Role::getName).collect(Collectors.toList()))
+                        .sign(algorithm);
+
+                Map<String, String> tokens = new HashMap<>();
+                tokens.put("access_token", access_token);
+                tokens.put("refresh_token", refresh_token);
+
+                response.setContentType(APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+            }catch (Exception exception){
+                response.setHeader("error", exception.getMessage());
+                response.setStatus(FORBIDDEN.value());
+
+                Map<String, String> error = new HashMap<>();
+                error.put("error_message", exception.getMessage());
+
+                response.setContentType(APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(), error);
+            }
+        }else {
+            throw new RuntimeException(REFRESH_TOKEN_IS_MISSING);
+        }
+    }
+
+    public String passwordEncode(String password){
+        return passwordEncoder.encode(password);
+    }
 }

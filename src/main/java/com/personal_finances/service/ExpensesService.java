@@ -10,10 +10,7 @@ import com.personal_finances.model.dto.AccountsDTO;
 import com.personal_finances.model.dto.ExpensesDTO;
 import com.personal_finances.repository.ExpensesRepository;
 import com.personal_finances.utils.GetDate;
-import com.personal_finances.utils.MessagesExceptions;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +18,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.personal_finances.utils.MessagesExceptions.*;
+
 @Service
 @Transactional
-@Slf4j
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class ExpensesService {
 
     private final ExpensesRepository repository;
@@ -47,10 +45,10 @@ public class ExpensesService {
         dto.setCategory(category);
         dto.setAccount(accountMapper.toAccounts(account));
 
-        Expenses expenditure = mapperExpenses.toExpenditure(dto);
-        repository.save(expenditure);
+        Expenses expense = mapperExpenses.toExpense(dto);
+        repository.save(expense);
 
-        return mapperExpenses.toDto(expenditure);
+        return mapperExpenses.toDto(expense);
     }
 
     public ExpensesDTO update(ExpensesDTO dto){
@@ -64,7 +62,7 @@ public class ExpensesService {
         dto.setCategory(category);
         dto.setAccount(accountMapper.toAccounts(account));
 
-        Expenses expense = mapperExpenses.toExpenditure(dto);
+        Expenses expense = mapperExpenses.toExpense(dto);
         expense.setId(dto.getId());
 
         repository.save(expense);
@@ -84,7 +82,7 @@ public class ExpensesService {
         Optional<Expenses> optionalExpenses = repository.findById(id);
 
         if (optionalExpenses.isEmpty()) {
-            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+            throw new BusinessException(NO_RECORDS_FOUND);
         }
 
         return mapperExpenses.optionalToDto(optionalExpenses);
@@ -94,7 +92,7 @@ public class ExpensesService {
         List<Optional<Expenses>> optionalExpenses = repository.findByCategory(id);
 
         if (optionalExpenses.isEmpty()){
-            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+            throw new BusinessException(NO_RECORDS_FOUND);
         }
 
         return optionalExpenses.stream()
@@ -106,7 +104,7 @@ public class ExpensesService {
         List<ExpensesDTO> lst = mapperExpenses.toListDTO(repository.findAll());
 
         if (lst.isEmpty()){
-            throw new BusinessException(MessagesExceptions.NO_RECORDS_FOUND);
+            throw new BusinessException(NO_RECORDS_FOUND);
         }
 
         return lst;

@@ -17,6 +17,7 @@ public class UsersMapper {
         dto.setCpf(user.getCpf());
         dto.setName(user.getName());
         dto.setBirthdate(user.getBirthdate());
+        dto.setLogin(user.getLogin());
 
         return dto;
     }
@@ -28,6 +29,7 @@ public class UsersMapper {
         dto.setCpf(user.get().getCpf());
         dto.setName(user.get().getName());
         dto.setBirthdate(user.get().getBirthdate());
+        dto.setLogin(user.get().getLogin());
 
         return dto;
     }
@@ -39,6 +41,7 @@ public class UsersMapper {
         user.setCpf(dto.getCpf());
         user.setName(dto.getName());
         user.setBirthdate(dto.getBirthdate());
+        user.setLogin(dto.getLogin());
 
         return user;
     }
@@ -46,4 +49,5 @@ public class UsersMapper {
     public List<UsersDTO> toListDTO(List<Users> list) {
         return list.stream().map(this::toDto).collect(Collectors.toList());
     }
+
 }
