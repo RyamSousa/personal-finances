@@ -36,12 +36,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers("/api/login/**", "/api/login/token/refresh/**").permitAll();
+        http.authorizeRequests().antMatchers(
+                "/api/login/**",
+                            "/api/login/token/refresh/**").permitAll();
         http.authorizeRequests().antMatchers(GET,"/api/**").hasAnyAuthority(ROLE_USER);
-        http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority(ROLE_USER);
-        http.authorizeRequests().antMatchers(PUT, "/api/**").hasAnyAuthority(ROLE_USER);
-        http.authorizeRequests().antMatchers(POST, "/api/role/**").hasAnyAuthority(ROLE_ADMIN);
         http.authorizeRequests().antMatchers(GET, "/api/role/**").hasAnyAuthority(ROLE_ADMIN);
+        http.authorizeRequests().antMatchers(POST, "/api/user/**").permitAll();
+        http.authorizeRequests().antMatchers(POST, "/api/accounts/**").hasAnyAuthority(ROLE_USER);
+        http.authorizeRequests().antMatchers(POST, "/api/categories/**").hasAnyAuthority(ROLE_USER);
+        http.authorizeRequests().antMatchers(POST, "/api/expenses/**").hasAnyAuthority(ROLE_USER);
+        http.authorizeRequests().antMatchers(POST, "/api/incomes/**").hasAnyAuthority(ROLE_USER);
+        http.authorizeRequests().antMatchers(POST, "/api/role/**").hasAnyAuthority(ROLE_ADMIN);
+        http.authorizeRequests().antMatchers(PUT, "/api/**").hasAnyAuthority(ROLE_USER);
+        http.authorizeRequests().antMatchers(PUT, "/api/user/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

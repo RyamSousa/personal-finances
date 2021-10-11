@@ -15,6 +15,7 @@ public class AccountMapper {
 
         dto.setId(account.getId());
         dto.setAccountNumber(account.getAccountNumber());
+        dto.setFinancialInstitution(account.getFinancialInstitution());
         dto.setBalance(account.getBalance());
         dto.setCreateDate(account.getCreateDate());
         dto.setUser(account.getUser());
@@ -27,6 +28,7 @@ public class AccountMapper {
 
         dto.setId(account.get().getId());
         dto.setAccountNumber(account.get().getAccountNumber());
+        dto.setFinancialInstitution(account.get().getFinancialInstitution());
         dto.setBalance(account.get().getBalance());
         dto.setCreateDate(account.get().getCreateDate());
         dto.setUser(account.get().getUser());
@@ -40,6 +42,7 @@ public class AccountMapper {
         account.setId(dto.getId());
         account.setAccountNumber(dto.getAccountNumber());
         account.setBalance(dto.getBalance());
+        account.setFinancialInstitution(dto.getFinancialInstitution());
         account.setCreateDate(dto.getCreateDate());
         account.setUser(dto.getUser());
 

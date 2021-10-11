@@ -27,5 +27,6 @@ public class UsersDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate birthdate;
 
+    @NotNull
     private Logins login;
 }

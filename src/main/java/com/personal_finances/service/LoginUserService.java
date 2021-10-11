@@ -12,6 +12,7 @@ import com.personal_finances.model.Role;
 import com.personal_finances.model.dto.LoginUserDTO;
 import com.personal_finances.repository.LoginRepository;
 import com.personal_finances.repository.RoleRepository;
+import com.personal_finances.utils.RolesUsers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -28,6 +29,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.personal_finances.utils.MessagesExceptions.*;
+import static com.personal_finances.utils.RolesUsers.ROLE_USER;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -68,7 +70,18 @@ public class LoginUserService implements UserDetailsService {
 
         login.setPassword(passwordEncoder.encode(login.getPassword()));
         Logins save = loginRepository.save(loginUserMapper.toLoginUser(login));
-        this.addRoleToLogin(login.getUsername(), "ROLE_USER");
+        this.addRoleToLogin(login.getUsername(), ROLE_USER);
+
+        return loginUserMapper.toDto(save);
+    }
+    public LoginUserDTO update(LoginUserDTO login){
+        Optional<Logins> loginUser = loginRepository.findByUsername(login.getUsername());
+
+        if (loginUser.isEmpty()) {
+            throw new BusinessException(USER_NOT_FOUND);
+        }
+
+        Logins save = loginRepository.save(loginUserMapper.toLoginUser(login));
 
         return loginUserMapper.toDto(save);
     }

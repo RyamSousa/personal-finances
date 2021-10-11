@@ -4,13 +4,16 @@ import com.personal_finances.exceptions.BusinessException;
 import com.personal_finances.mapper.AccountMapper;
 import com.personal_finances.mapper.LoginUserMapper;
 import com.personal_finances.mapper.UsersMapper;
+import com.personal_finances.model.Logins;
 import com.personal_finances.model.Users;
 import com.personal_finances.model.dto.AccountsDTO;
 import com.personal_finances.model.dto.LoginUserDTO;
 import com.personal_finances.model.dto.UsersDTO;
 import com.personal_finances.repository.AccountsRepository;
 import com.personal_finances.repository.UsersRepository;
+import com.personal_finances.utils.RolesUsers;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.personal_finances.utils.MessagesExceptions.*;
+import static com.personal_finances.utils.RolesUsers.ROLE_USER;
 
 @Service
 @Transactional
@@ -44,25 +48,27 @@ public class UsersService {
         loginUserService.findByUsername(dto.getLogin());
 
         dto.getLogin().setPassword(loginUserService.passwordEncode(dto.getLogin().getPassword()));
-        System.out.println();
         Users save = repository.save(mapperUsers.toUsers(dto));
-        loginUserService.addRoleToLogin(dto.getLogin().getUsername(), "ROLE_USER");
+        loginUserService.addRoleToLogin(dto.getLogin().getUsername(), ROLE_USER);
 
         return mapperUsers.toDto(save);
     }
 
+    // REVISAR
     public UsersDTO update(UsersDTO dto){
         Optional<Users> user = repository.findByCpf(dto.getCpf());
 
-        if(user.isPresent()){
-            throw new BusinessException(DATA_ALREADY_EXISTS);
+        if(user.isEmpty()){
+            throw new BusinessException(NO_RECORDS_FOUND);
         }
 
-        LoginUserDTO login = loginUserService.save(loginUserMapper.toDto(dto.getLogin()));
-        dto.setLogin(loginUserMapper.toLoginUser(login));
+        LoginUserDTO loginDTO = loginUserService.findByUsername(dto.getLogin().getUsername());
+        Logins login = loginUserMapper.toLoginUser(loginDTO);
+        login.setPassword(loginUserService.passwordEncode(dto.getLogin().getPassword()));
 
-        dto.setId(user.get().getId());
+        dto.setLogin(login);
         Users save = repository.save(mapperUsers.toUsers(dto));
+        loginUserService.update(loginUserMapper.toDto(login));
 
         return mapperUsers.toDto(save);
     }
@@ -72,8 +78,10 @@ public class UsersService {
 
         List<AccountsDTO> accounts = this.findAllAccountsByUser(userValidation.getId());
 
-        for (AccountsDTO ac: accounts) {
-            accountsRepository.deleteById(ac.getId());
+        if(!accounts.isEmpty()){
+            for (AccountsDTO ac: accounts) {
+                accountsRepository.deleteById(ac.getId());
+            }
         }
 
         repository.deleteById(userValidation.getId());
@@ -112,15 +120,8 @@ public class UsersService {
     }
 
     public List<AccountsDTO> findAllAccountsByUser(Long id) {
-
-        List<AccountsDTO> lst = repository.findAllAccountsByUser(id)
+        return repository.findAllAccountsByUser(id)
                 .stream().map(accountMapper::optionalToDto).collect(Collectors.toList());
-
-        if (lst.isEmpty()){
-            throw new BusinessException(NO_RECORDS_FOUND);
-        }
-
-        return lst;
     }
 
 }
