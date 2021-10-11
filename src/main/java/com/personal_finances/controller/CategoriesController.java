@@ -26,7 +26,7 @@ public class CategoriesController {
         return ResponseEntity.ok(serviceCategory.save(dto));
     }
 
-    @ApiOperation("Busca uma categoria por id\"")
+    @ApiOperation("Busca uma categoria por id")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CategoriesDTO> findById(@PathVariable Long id){
         return ResponseEntity.ok(serviceCategory.findById(id));

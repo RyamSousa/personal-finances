@@ -15,7 +15,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Api("Retorna dados das receitas")
 @RestController
-@RequestMapping(value = "/incomes")
+@RequestMapping(value = "/api/incomes")
 @RequiredArgsConstructor
 public class IncomesController {
 

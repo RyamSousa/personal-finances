@@ -17,7 +17,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 @RestController
-@RequestMapping("/api/login/user")
+@RequestMapping("/api/login")
 @RequiredArgsConstructor
 public class LoginUserController {
 
