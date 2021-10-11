@@ -18,7 +18,7 @@ import static javax.persistence.GenerationType.AUTO;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginUser {
+public class Logins {
 
     @Id
     @GeneratedValue(strategy = AUTO)

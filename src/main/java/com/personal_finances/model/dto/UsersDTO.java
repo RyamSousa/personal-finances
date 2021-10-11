@@ -1,7 +1,7 @@
 package com.personal_finances.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.personal_finances.model.LoginUser;
+import com.personal_finances.model.Logins;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,5 +27,5 @@ public class UsersDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate birthdate;
 
-    private LoginUser login;
+    private Logins login;
 }

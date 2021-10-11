@@ -1,18 +1,10 @@
 package com.personal_finances;
 
-import com.personal_finances.model.LoginUser;
-import com.personal_finances.model.Role;
-import com.personal_finances.model.dto.LoginUserDTO;
-import com.personal_finances.service.LoginUserService;
-import com.personal_finances.service.RoleService;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.ArrayList;
 
 @SpringBootApplication
 public class PersonalFinancesApplication {

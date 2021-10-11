@@ -1,6 +1,6 @@
 package com.personal_finances.mapper;
 
-import com.personal_finances.model.LoginUser;
+import com.personal_finances.model.Logins;
 import com.personal_finances.model.dto.LoginUserDTO;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import java.util.Optional;
 @Component
 public class LoginUserMapper {
 
-    public LoginUserDTO toDto(LoginUser loginUser){
+    public LoginUserDTO toDto(Logins loginUser){
         LoginUserDTO dto = new LoginUserDTO();
 
         dto.setId(loginUser.getId());
@@ -20,8 +20,8 @@ public class LoginUserMapper {
         return dto;
     }
 
-    public LoginUser toLoginUser(LoginUserDTO dto){
-        LoginUser loginUser = new LoginUser();
+    public Logins toLoginUser(LoginUserDTO dto){
+        Logins loginUser = new Logins();
 
         loginUser.setId(dto.getId());
         loginUser.setUsername(dto.getUsername());
@@ -31,7 +31,7 @@ public class LoginUserMapper {
         return loginUser;
     }
 
-    public LoginUserDTO optionalToDto(Optional<LoginUser> loginUser) {
+    public LoginUserDTO optionalToDto(Optional<Logins> loginUser) {
         LoginUserDTO dto = new LoginUserDTO();
 
         dto.setId(loginUser.get().getId());
