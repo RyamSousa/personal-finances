@@ -54,7 +54,6 @@ public class UsersService {
         return mapperUsers.toDto(save);
     }
 
-    // REVISAR
     public UsersDTO update(UsersDTO dto){
         Optional<Users> user = repository.findByCpf(dto.getCpf());
 

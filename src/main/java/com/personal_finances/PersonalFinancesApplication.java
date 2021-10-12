@@ -14,7 +14,7 @@ public class PersonalFinancesApplication {
 	}
 
 	@Bean
-	PasswordEncoder passwordEncoder(){
+	public PasswordEncoder passwordEncoder(){
 		return new BCryptPasswordEncoder();
 	}
 }

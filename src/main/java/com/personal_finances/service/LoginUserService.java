@@ -134,8 +134,6 @@ public class LoginUserService implements UserDetailsService {
 
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        List<Object> responseBody = new ArrayList<>();
-
         String authorizationHeader = request.getHeader(AUTHORIZATION);
 
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
