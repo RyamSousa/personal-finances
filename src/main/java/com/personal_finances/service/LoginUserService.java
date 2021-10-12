@@ -12,7 +12,7 @@ import com.personal_finances.model.Role;
 import com.personal_finances.model.dto.LoginUserDTO;
 import com.personal_finances.repository.LoginRepository;
 import com.personal_finances.repository.RoleRepository;
-import com.personal_finances.utils.RolesUsers;
+import com.personal_finances.utils.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -44,6 +44,7 @@ public class LoginUserService implements UserDetailsService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private final Keys keys;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -139,7 +140,7 @@ public class LoginUserService implements UserDetailsService {
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
             try {
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                Algorithm algorithm = Algorithm.HMAC256(keys.JWT_KEY.getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
 
