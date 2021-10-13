@@ -16,23 +16,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Api("Retorna dados dos usuários")
 @RestController
-@RequestMapping(value = "/api/users")
+@RequestMapping(value = "/api/user")
 @RequiredArgsConstructor
 public class UsersController {
 
     private final UsersService usersService;
-
-    @ApiOperation("Cria um novo usuário")
-    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<UsersDTO> save(@Valid @RequestBody UsersDTO dto){
-        return ResponseEntity.ok(usersService.save(dto));
-    }
-
-    @ApiOperation("Atualiza os dados do usuário")
-    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<UsersDTO> update(@Valid @RequestBody UsersDTO dto){
-        return ResponseEntity.ok(usersService.update(dto));
-    }
 
     @ApiOperation("Busca um usuário por id")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
@@ -46,12 +34,6 @@ public class UsersController {
         return ResponseEntity.ok(usersService.findByCpf(cpf));
     }
 
-    @ApiOperation("Deleta um usuário por id")
-    @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<UsersDTO> delete(@PathVariable Long id){
-        return ResponseEntity.ok(usersService.delete(id));
-    }
-
     @ApiOperation("Busca todos os usuário")
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UsersDTO>> findAllUsers(){
@@ -62,5 +44,23 @@ public class UsersController {
     @GetMapping(value = "/accounts/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<AccountsDTO>> findAllAccountsByUser(@PathVariable Long id){
         return ResponseEntity.ok(usersService.findAllAccountsByUser(id));
+    }
+
+    @ApiOperation("Cria um novo usuário")
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<UsersDTO> save(@Valid @RequestBody UsersDTO dto){
+        return ResponseEntity.ok(usersService.save(dto));
+    }
+
+    @ApiOperation("Atualiza os dados do usuário")
+    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<UsersDTO> update(@Valid @RequestBody UsersDTO dto){
+        return ResponseEntity.ok(usersService.update(dto));
+    }
+
+    @ApiOperation("Deleta um usuário por id")
+    @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<UsersDTO> delete(@PathVariable Long id){
+        return ResponseEntity.ok(usersService.delete(id));
     }
 }

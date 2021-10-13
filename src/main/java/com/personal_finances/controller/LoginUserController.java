@@ -17,16 +17,17 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 @RestController
-@RequestMapping("/api/login/user")
+@RequestMapping("/api/login")
 @RequiredArgsConstructor
 public class LoginUserController {
 
     private final LoginUserService loginService;
 
-    @GetMapping(value = "/token/refresh", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @GetMapping(value = "/token/refresh")
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println(request);
+        System.out.println(response);
         loginService.refreshToken(request, response);
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)

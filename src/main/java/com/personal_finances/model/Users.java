@@ -22,5 +22,5 @@ public class Users {
     private LocalDate birthdate;
 
     @OneToOne(cascade = ALL)
-    private LoginUser login;
+    private Logins login;
 }
