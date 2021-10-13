@@ -29,7 +29,7 @@ This repository is a Rest API developed to be consumed by the frontend of this p
   - Autentication of user :heavy_check_mark:
   - Autorization of user :heavy_check_mark:
   - Refresh token :heavy_check_mark:
-  - Using environment variables to hide hard codes
+  - Using environment variables to hide hard codes :heavy_check_mark:
 
 <img src="https://i.imgur.com/oeCsT6G.png" title="source: imgur.com" heigth="1000px" width="900px" />
 <img src="https://i.imgur.com/wOPLNF8.png" title="source: imgur.com" heigth="1000px" width="900px" />
