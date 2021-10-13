@@ -2,24 +2,21 @@ package com.personal_finances.controller;
 
 import com.personal_finances.model.dto.ExpensesDTO;
 import com.personal_finances.service.ExpensesService;
-import com.personal_finances.utils.GetDate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Api("Retorna dados das despesas")
 @RestController
-@RequestMapping(value = "/expenses")
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequestMapping(value = "/api/expenses")
+@RequiredArgsConstructor
 public class ExpensesController {
 
     private final ExpensesService serviceExpenses;

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.GenerationType.*;
 
 @Entity
@@ -19,4 +20,7 @@ public class Users {
     private String name;
     private String cpf;
     private LocalDate birthdate;
+
+    @OneToOne(cascade = ALL)
+    private Logins login;
 }

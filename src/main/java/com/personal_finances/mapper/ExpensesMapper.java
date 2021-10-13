@@ -37,7 +37,7 @@ public class ExpensesMapper {
         return dto;
     }
 
-    public Expenses toExpenditure(ExpensesDTO dto) {
+    public Expenses toExpense(ExpensesDTO dto) {
         Expenses expense = new Expenses();
 
         expense.setId(dto.getId());

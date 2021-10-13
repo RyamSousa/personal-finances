@@ -4,8 +4,7 @@ import com.personal_finances.model.dto.IncomesDTO;
 import com.personal_finances.service.IncomesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +15,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Api("Retorna dados das receitas")
 @RestController
-@RequestMapping(value = "/incomes")
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequestMapping(value = "/api/incomes")
+@RequiredArgsConstructor
 public class IncomesController {
 
     private final IncomesService serviceIncomes;

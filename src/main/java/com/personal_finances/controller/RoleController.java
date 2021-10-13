@@ -1,9 +1,8 @@
 package com.personal_finances.controller;
 
-import com.personal_finances.model.Role;
+import com.personal_finances.model.dto.RoleDTO;
 import com.personal_finances.service.RoleService;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,18 +12,18 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/api/role")
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class RoleController {
 
     private final RoleService roleService;
 
-    @GetMapping(value = "/all", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Role>> findAllRoles(){
-        return ResponseEntity.ok(roleService.findAllRoles());
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<RoleDTO> saveRole(@RequestBody RoleDTO role){
+        return ResponseEntity.ok(roleService.save(role));
     }
 
-    @PostMapping(value = "/save", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Role> saveRole(@RequestBody Role role){
-        return ResponseEntity.ok(roleService.save(role));
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<RoleDTO>> findAllRoles(){
+        return ResponseEntity.ok(roleService.findAllRoles());
     }
 }

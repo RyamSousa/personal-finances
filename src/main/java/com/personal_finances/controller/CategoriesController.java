@@ -1,12 +1,10 @@
 package com.personal_finances.controller;
 
-import com.personal_finances.model.Categories;
 import com.personal_finances.model.dto.CategoriesDTO;
 import com.personal_finances.service.CategoriesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -17,7 +15,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Api("Retorna dados das categorias que estão relacionadas as receitas e despesas")
 @RestController
 @RequestMapping(value = "/api/categories")
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class CategoriesController {
 
     private final CategoriesService serviceCategory;
@@ -28,7 +26,7 @@ public class CategoriesController {
         return ResponseEntity.ok(serviceCategory.save(dto));
     }
 
-    @ApiOperation("Busca uma categoria por id\"")
+    @ApiOperation("Busca uma categoria por id")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CategoriesDTO> findById(@PathVariable Long id){
         return ResponseEntity.ok(serviceCategory.findById(id));
