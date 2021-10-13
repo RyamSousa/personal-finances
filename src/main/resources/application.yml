@@ -1,10 +1,11 @@
+
 spring:
   datasource:
     platform: postgres
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/finances
-    username: postgres
-    password: 123
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
   jpa:
     database: POSTGRESQL
     show-sql: true
