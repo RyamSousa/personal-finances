@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 @Data
 public class Keys {
 
-    @Value("${jwt.key}")
-    public String JWT_KEY;
+    //@Value("${jwt.key}")
+    public String JWT_KEY = "key";
 }
