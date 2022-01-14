@@ -1,6 +1,6 @@
 package com.personal_finances.controller;
 
-import com.personal_finances.model.dto.IncomesDTO;
+import com.personal_finances.model.Incomes;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
@@ -19,31 +19,31 @@ public interface IncomesController {
 
     @ApiOperation("Cria uma nova receita")
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<IncomesDTO> save(@Valid @RequestBody IncomesDTO dto);
+    public ResponseEntity<Incomes> save(@Valid @RequestBody Incomes income);
 
     @ApiOperation("Atualiza uma receita")
     @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<IncomesDTO> update(@Valid @RequestBody IncomesDTO dto);
+    public ResponseEntity<Incomes> update(@Valid @RequestBody Incomes income);
 
     @ApiOperation("Busca uma receita por id")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<IncomesDTO> findById(@PathVariable Long id);
+    public ResponseEntity<Incomes> findById(@PathVariable Long id);
 
     @ApiOperation("Busca uma receita por categoria")
     @GetMapping(value = "/category/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<IncomesDTO>> findByCategory(@PathVariable Long id);
+    public ResponseEntity<List<Incomes>> findByCategory(@PathVariable Long id);
 
     @ApiOperation("Deleta uma receita por id")
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<IncomesDTO> delete(@PathVariable Long id);
+    public ResponseEntity<Incomes> delete(@PathVariable Long id);
 
     @ApiOperation("Busca todas as receitas")
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<IncomesDTO>> findAllIncomes();
+    public ResponseEntity<List<Incomes>> findAllIncomes();
 
     @ApiOperation("Busca todas as receitas por mês e ano")
     @GetMapping(value = "/date/{idAccount}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<IncomesDTO>> findIncomesByDate(
+    public ResponseEntity<List<Incomes>> findIncomesByDate(
             @RequestParam(value = "date", defaultValue = "Incomes not found") String date,
             @PathVariable Long idAccount);
 }

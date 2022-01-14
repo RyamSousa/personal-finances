@@ -1,10 +1,8 @@
 package com.personal_finances.controller.impl;
 
 import com.personal_finances.controller.LoginUserController;
-import com.personal_finances.model.dto.LoginUserDTO;
+import com.personal_finances.model.Logins;
 import com.personal_finances.service.LoginUserService;
-
-import com.personal_finances.utils.FormRoleToLogin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -14,9 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 
 @Component
 @RequiredArgsConstructor
@@ -32,12 +27,12 @@ public class LoginUserControllerImpl implements LoginUserController {
     }
 
     @Override
-    public ResponseEntity<List<LoginUserDTO>> findAllLogins(){
+    public ResponseEntity<List<Logins>> findAllLogins(){
         return ResponseEntity.ok().body(loginService.findAllLongings());
     }
 
     @Override
-    public ResponseEntity<LoginUserDTO> findByUsername(@RequestParam String username){
+    public ResponseEntity<Logins> findByUsername(@RequestParam String username){
         return ResponseEntity.ok(loginService.findByUsername(username));
     }
 

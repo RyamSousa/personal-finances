@@ -1,9 +1,9 @@
 package com.personal_finances.controller.impl;
 
 import com.personal_finances.controller.AccountsController;
-import com.personal_finances.model.dto.AccountsDTO;
-import com.personal_finances.model.dto.ExpensesDTO;
-import com.personal_finances.model.dto.IncomesDTO;
+import com.personal_finances.model.Accounts;
+import com.personal_finances.model.Expenses;
+import com.personal_finances.model.Incomes;
 import com.personal_finances.service.AccountsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,42 +20,42 @@ public class AccountsControllerImpl implements AccountsController {
     private final AccountsService serviceAccounts;
 
     @Override
-    public ResponseEntity<AccountsDTO> findById(@PathVariable Long id){
+    public ResponseEntity<Accounts> findById(@PathVariable Long id){
         return ResponseEntity.ok(serviceAccounts.findById(id));
     }
 
     @Override
-    public ResponseEntity<AccountsDTO> findByAccountNumber(@PathVariable Long accountNumber){
+    public ResponseEntity<Accounts> findByAccountNumber(@PathVariable Long accountNumber){
         return ResponseEntity.ok(serviceAccounts.findByAccountNumber(accountNumber));
     }
 
     @Override
-    public ResponseEntity<List<AccountsDTO>> findAllAccounts(){
+    public ResponseEntity<List<Accounts>> findAllAccounts(){
         return ResponseEntity.ok(serviceAccounts.findAllAccounts());
     }
 
     @Override
-    public ResponseEntity<List<IncomesDTO>> findAllIncomesByAccount(@PathVariable Long id){
+    public ResponseEntity<List<Incomes>> findAllIncomesByAccount(@PathVariable Long id){
         return ResponseEntity.ok(serviceAccounts.findAllIncomesByAccount(id));
     }
 
     @Override
-    public ResponseEntity<List<ExpensesDTO>> findAllExpensesByAccount(@PathVariable Long id){
+    public ResponseEntity<List<Expenses>> findAllExpensesByAccount(@PathVariable Long id){
         return ResponseEntity.ok(serviceAccounts.findAllExpensesByAccount(id));
     }
 
     @Override
-    public ResponseEntity<AccountsDTO> save(@Valid @RequestBody AccountsDTO dto){
-        return ResponseEntity.ok(serviceAccounts.save(dto));
+    public ResponseEntity<Accounts> save(@Valid @RequestBody Accounts account){
+        return ResponseEntity.ok(serviceAccounts.save(account));
     }
 
     @Override
-    public ResponseEntity<AccountsDTO> update(@Valid @RequestBody AccountsDTO dto){
-        return ResponseEntity.ok(serviceAccounts.update(dto));
+    public ResponseEntity<Accounts> update(@Valid @RequestBody Accounts account){
+        return ResponseEntity.ok(serviceAccounts.update(account));
     }
 
     @Override
-    public ResponseEntity<AccountsDTO> delete(@PathVariable Long id){
+    public ResponseEntity<Accounts> delete(@PathVariable Long id){
         return ResponseEntity.ok(serviceAccounts.delete(id));
     }
 

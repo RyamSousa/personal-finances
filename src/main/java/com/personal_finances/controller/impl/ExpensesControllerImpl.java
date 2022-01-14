@@ -1,6 +1,7 @@
 package com.personal_finances.controller.impl;
 
 import com.personal_finances.controller.ExpensesController;
+import com.personal_finances.model.Expenses;
 import com.personal_finances.model.dto.ExpensesDTO;
 import com.personal_finances.service.ExpensesService;
 import io.swagger.annotations.Api;
@@ -22,37 +23,37 @@ public class ExpensesControllerImpl implements ExpensesController {
     private final ExpensesService serviceExpenses;
 
     @Override
-    public ResponseEntity<ExpensesDTO> save(@Valid @RequestBody ExpensesDTO dto){
+    public ResponseEntity<Expenses> save(@Valid @RequestBody Expenses expense){
         return ResponseEntity.ok(serviceExpenses.save(dto));
     }
 
     @Override
-    public ResponseEntity<ExpensesDTO> update(@Valid @RequestBody ExpensesDTO dto){
-        return ResponseEntity.ok(serviceExpenses.update(dto));
+    public ResponseEntity<Expenses> update(@Valid @RequestBody Expenses expense){
+        return ResponseEntity.ok(serviceExpenses.update(expense));
     }
 
     @Override
-    public ResponseEntity<ExpensesDTO> findById(@PathVariable Long id){
+    public ResponseEntity<Expenses> findById(@PathVariable Long id){
         return ResponseEntity.ok(serviceExpenses.findById(id));
     }
 
     @Override
-    public ResponseEntity<List<ExpensesDTO>> findByCategory(@PathVariable Long id){
+    public ResponseEntity<List<Expenses>> findByCategory(@PathVariable Long id){
         return ResponseEntity.ok(serviceExpenses.findByCategory(id));
     }
 
     @Override
-    public ResponseEntity<ExpensesDTO> delete(@PathVariable Long id){
+    public ResponseEntity<Expenses> delete(@PathVariable Long id){
         return ResponseEntity.ok(serviceExpenses.delete(id));
     }
 
     @Override
-    public ResponseEntity<List<ExpensesDTO>> findAllExpenditures(){
+    public ResponseEntity<List<Expenses>> findAllExpenditures(){
         return ResponseEntity.ok(serviceExpenses.findAllExpenses());
     }
 
     @Override
-    public ResponseEntity<List<ExpensesDTO>> findExpensesByDate(
+    public ResponseEntity<List<Expenses>> findExpensesByDate(
             @RequestParam(value = "date", defaultValue = "Expenses not found") String date,
             @PathVariable Long idAccount){
         return ResponseEntity.ok(serviceExpenses.findExpensesByDate(idAccount, date));

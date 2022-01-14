@@ -1,6 +1,6 @@
 package com.personal_finances.controller;
 
-import com.personal_finances.model.dto.LoginUserDTO;
+import com.personal_finances.model.Logins;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +22,8 @@ public interface LoginUserController {
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<LoginUserDTO>> findAllLogins();
+    public ResponseEntity<List<Logins>> findAllLogins();
 
     @GetMapping(value = "/username", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoginUserDTO> findByUsername(@RequestParam String username);
+    public ResponseEntity<Logins> findByUsername(@RequestParam String username);
 }
