@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 import static javax.persistence.GenerationType.AUTO;
 
@@ -18,5 +19,7 @@ public class Role {
     @Id
     @GeneratedValue(strategy = AUTO)
     private Long id;
+
+    @NotNull
     private String name;
 }

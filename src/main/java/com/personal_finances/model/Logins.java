@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +24,14 @@ public class Logins {
     @Id
     @GeneratedValue(strategy = AUTO)
     private Long id;
+
+    @NotNull
     private String username;
+
+    @NotNull
     private String password;
 
+    @NotNull
     @ManyToMany(fetch = EAGER)
     private List<Role> roles = new ArrayList<>();
 }
