@@ -6,15 +6,12 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.personal_finances.exceptions.BusinessException;
-import com.personal_finances.mapper.LoginUserMapper;
 import com.personal_finances.model.Logins;
 import com.personal_finances.model.Role;
-import com.personal_finances.model.dto.LoginUserDTO;
 import com.personal_finances.repository.LoginRepository;
 import com.personal_finances.repository.RoleRepository;
 import com.personal_finances.utils.Keys;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,7 +37,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class LoginUserService implements UserDetailsService {
 
     private final LoginRepository loginRepository;
-    private final LoginUserMapper loginUserMapper;
 
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -49,10 +45,9 @@ public class LoginUserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       LoginUserDTO dto = this.findByUsername(username);
+       Logins login = this.findByUsername(username);
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        Logins login = loginUserMapper.toLoginUser(dto);
 
         login.getRoles().forEach(
                 role-> authorities.add(
@@ -63,7 +58,7 @@ public class LoginUserService implements UserDetailsService {
         return new User(login.getUsername(), login.getPassword(), authorities);
     }
 
-    public LoginUserDTO save(LoginUserDTO login){
+    public Logins save(Logins login){
         Optional<Logins> loginUser = loginRepository.findByUsername(login.getUsername());
 
         if (loginUser.isPresent()) {
@@ -71,33 +66,33 @@ public class LoginUserService implements UserDetailsService {
         }
 
         login.setPassword(passwordEncoder.encode(login.getPassword()));
-        Logins save = loginRepository.save(loginUserMapper.toLoginUser(login));
+        Logins save = loginRepository.save(login);
         this.addRoleToLogin(login.getUsername(), ROLE_USER);
 
-        return loginUserMapper.toDto(save);
+        return save;
     }
-    public LoginUserDTO update(LoginUserDTO login){
+    public Logins update(Logins login){
         Optional<Logins> loginUser = loginRepository.findByUsername(login.getUsername());
 
         if (loginUser.isEmpty()) {
             throw new BusinessException(USER_NOT_FOUND);
         }
 
-        Logins save = loginRepository.save(loginUserMapper.toLoginUser(login));
+        Logins save = loginRepository.save(login);
 
-        return loginUserMapper.toDto(save);
+        return save;
     }
 
-    public LoginUserDTO delete(String username){
-        LoginUserDTO login = this.findByUsername(username);
+    public Logins delete(String username){
+        Logins login = this.findByUsername(username);
 
-        loginRepository.delete(loginUserMapper.toLoginUser(login));
+        loginRepository.delete(login);
 
         return login;
     }
 
-    public LoginUserDTO addRoleToLogin(String username, String roleName){
-        LoginUserDTO login = this.findByUsername(username);
+    public Logins addRoleToLogin(String username, String roleName){
+        Logins login = this.findByUsername(username);
         Optional<Role> role = roleRepository.findByName(roleName);
 
         if (role.isEmpty()){
@@ -109,29 +104,28 @@ public class LoginUserService implements UserDetailsService {
         return login;
     }
 
-    public LoginUserDTO findByUsername(String username){
+    public Logins findByUsername(String username){
         Optional<Logins> loginUser = loginRepository.findByUsername(username);
 
         if(loginUser.isEmpty()){
             throw new BusinessException(NO_RECORDS_FOUND);
         }
 
-        return loginUserMapper.optionalToDto(loginUser);
+        return loginUser.get();
     }
 
-    public LoginUserDTO findByUsername(Logins loginUser){
+    public Logins findByUsername(Logins loginUser){
         Optional<Logins> login = loginRepository.findByUsername(loginUser.getUsername());
 
         if(login.isPresent()){
             throw new BusinessException(USERNAME_ALREADY_EXISTS);
         }
 
-        return loginUserMapper.toDto(loginUser);
+        return login.get();
     }
 
-    public List<LoginUserDTO> findAllLongings(){
-        return loginRepository.findAll()
-                .stream().map(loginUserMapper::toDto).collect(Collectors.toList());
+    public List<Logins> findAllLongings(){
+        return loginRepository.findAll();
     }
 
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -146,8 +140,7 @@ public class LoginUserService implements UserDetailsService {
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
 
                 String username = decodedJWT.getSubject();
-                LoginUserDTO dto = this.findByUsername(username);
-                Logins loginUser = loginUserMapper.toLoginUser(dto);
+                Logins loginUser = this.findByUsername(username);
 
                 String access_token = JWT.create()
                         .withSubject(loginUser.getUsername())

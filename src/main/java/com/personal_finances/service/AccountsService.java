@@ -1,16 +1,11 @@
 package com.personal_finances.service;
 
 import com.personal_finances.exceptions.BusinessException;
-import com.personal_finances.mapper.ExpensesMapper;
-import com.personal_finances.mapper.IncomesMapper;
-import com.personal_finances.mapper.UsersMapper;
 import com.personal_finances.model.Accounts;
-import com.personal_finances.model.dto.AccountsDTO;
-import com.personal_finances.model.dto.ExpensesDTO;
-import com.personal_finances.model.dto.IncomesDTO;
-import com.personal_finances.model.dto.UsersDTO;
+import com.personal_finances.model.Expenses;
+import com.personal_finances.model.Incomes;
+import com.personal_finances.model.Users;
 import com.personal_finances.repository.AccountsRepository;
-import com.personal_finances.mapper.AccountMapper;
 import com.personal_finances.repository.ExpensesRepository;
 import com.personal_finances.repository.IncomesRepository;
 import com.personal_finances.utils.GetDate;
@@ -29,107 +24,95 @@ import static com.personal_finances.utils.MessagesExceptions.*;
 @RequiredArgsConstructor
 public class AccountsService {
 
-    private final AccountsRepository repository;
-    private final AccountMapper accountsMapper;
+    private final AccountsRepository accountsRepository;
 
     private final UsersService usersService;
-    private final UsersMapper usersMapper;
 
     private final IncomesRepository incomesRepository;
-    private final IncomesMapper incomesMapper;
 
     private final ExpensesRepository expensesRepository;
-    private final ExpensesMapper expensesMapper;
 
-    public AccountsDTO save(AccountsDTO dto){
-        UsersDTO user = usersService.findByCpf(dto.getUser().getCpf());
-        Accounts account = null;
+    public Accounts save(Accounts account){
+        Users user = usersService.findByCpf(account.getUser().getCpf());
 
         if(user != null){
-            dto.setUser(usersMapper.toUsers(user));
-            dto.setCreateDate(GetDate.getDateSystem());
-            Optional<Accounts> optionalAccount = repository.findByAccountNumberUser(
-                    dto.getAccountNumber(), dto.getUser().getCpf());
+            account.setCreateDate(GetDate.getDateSystem());
+            Optional<Accounts> optionalAccount = accountsRepository.findByAccountNumberUser(
+                    account.getAccountNumber(), account.getUser().getCpf());
 
             if (optionalAccount.isPresent()){
                 throw new BusinessException(ACCOUNT_NOT_FOUND);
             }
-            account = accountsMapper.toAccounts(dto);
-            repository.save(account);
+            accountsRepository.save(account);
         }else {
             throw new BusinessException(USER_NOT_FOUND);
         }
 
-        return accountsMapper.toDto(account);
+        return account;
     }
 
-    public AccountsDTO update(AccountsDTO dto){
-        UsersDTO user = usersService.findByCpf(dto.getUser().getCpf());
-        Accounts account = null;
+    public Accounts update(Accounts account){
+        Users user = usersService.findByCpf(account.getUser().getCpf());
 
         if(!(user == null)){
-            dto.setUser(usersMapper.toUsers(user));
-            Optional<Accounts> optionalAccount = repository.findByAccountNumberUser(
-                    dto.getAccountNumber(), dto.getUser().getCpf());
+            Optional<Accounts> optionalAccount = accountsRepository.findByAccountNumberUser(
+                    account.getAccountNumber(), account.getUser().getCpf());
 
             if (optionalAccount.isEmpty()){
                 throw new BusinessException(ACCOUNT_NOT_FOUND);
             }
-            dto.setId(optionalAccount.get().getId());
-            dto.setCreateDate(optionalAccount.get().getCreateDate());
-
-            account = accountsMapper.toAccounts(dto);
-            repository.save(account);
+            accountsRepository.save(account);
         }else {
             throw new BusinessException(USER_NOT_FOUND);
         }
 
-        return accountsMapper.toDto(account);
+        return account;
     }
 
-    public AccountsDTO delete(Long id){
+    public Accounts delete(Long id){
 
-        AccountsDTO accountValidation = this.findById(id);
+        Accounts accountValidation = this.findById(id);
 
-        List<IncomesDTO> incomes = this.findAllIncomesByAccount(accountValidation.getId());
-        List<ExpensesDTO> expenses = this.findAllExpensesByAccount(accountValidation.getId());
+        List<Incomes> incomes = this.findAllIncomesByAccount(accountValidation.getId());
+        List<Expenses> expenses = this.findAllExpensesByAccount(accountValidation.getId());
 
         if (!incomes.isEmpty()){
-            for (IncomesDTO re: incomes) {
+            for (Incomes re: incomes) {
                 incomesRepository.deleteById(re.getId());
             }
         }
         if (!expenses.isEmpty()){
-            for (ExpensesDTO ex: expenses) {
+            for (Expenses ex: expenses) {
                 expensesRepository.deleteById(ex.getId());
             }
         }
 
-        repository.deleteById(accountValidation.getId());
+        accountsRepository.deleteById(accountValidation.getId());
 
         return accountValidation;
     }
 
-    public AccountsDTO findById(Long id){
-        Optional<Accounts> optionalAccount = repository.findById(id);
+    public Accounts findById(Long id){
+        Optional<Accounts> optionalAccount = accountsRepository.findById(id);
 
         if (optionalAccount.isEmpty()) {
             throw new BusinessException(NO_RECORDS_FOUND);
         }
-        return accountsMapper.optionalToDto(optionalAccount);
+        return optionalAccount.get();
     }
 
-    public AccountsDTO findByAccountNumber(Long accountNumber){
-        Optional<Accounts> account = repository.findByAccountNumber(accountNumber);
-        if(account.isEmpty()){
+    public Accounts findByAccountNumber(Long accountNumber){
+        Optional<Accounts> optionalAccount = accountsRepository.findByAccountNumber(accountNumber);
+
+        if(optionalAccount.isEmpty()){
             throw new BusinessException(ACCOUNT_NOT_FOUND);
         }
 
-        return accountsMapper.optionalToDto(account);
+        return optionalAccount.get();
     }
 
-    public List<AccountsDTO> findAllAccounts(){
-        List<AccountsDTO> lst = accountsMapper.toListDTO(repository.findAll());
+    public List<Accounts> findAllAccounts(){
+        List<Accounts> lst = accountsRepository.findAll();
 
         if(lst.isEmpty()){
             throw new BusinessException(NO_RECORDS_FOUND);
@@ -138,15 +121,15 @@ public class AccountsService {
         return lst;
     }
 
-    public List<IncomesDTO> findAllIncomesByAccount(Long id){
+    public List<Incomes> findAllIncomesByAccount(Long id){
 
-        return repository.findAllIncomesByAccount(id)
-                .stream().map(incomesMapper::optionalToDto).collect(Collectors.toList());
+        return accountsRepository.findAllIncomesByAccount(id)
+                .stream().map(acc -> acc.get()).collect(Collectors.toList());
     }
 
-    public List<ExpensesDTO> findAllExpensesByAccount(Long id){
+    public List<Expenses> findAllExpensesByAccount(Long id){
 
-        return repository.findAllExpensesByAccount(id)
-                .stream().map(expensesMapper::optionalToDto).collect(Collectors.toList());
+        return accountsRepository.findAllExpensesByAccount(id)
+                .stream().map(acc -> acc.get()).collect(Collectors.toList());
     }
 }

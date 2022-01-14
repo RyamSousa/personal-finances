@@ -1,13 +1,8 @@
 package com.personal_finances.service;
 
 import com.personal_finances.exceptions.BusinessException;
-import com.personal_finances.mapper.AccountMapper;
-import com.personal_finances.mapper.CategoriesMapper;
-import com.personal_finances.mapper.ExpensesMapper;
-import com.personal_finances.model.Categories;
+import com.personal_finances.model.Accounts;
 import com.personal_finances.model.Expenses;
-import com.personal_finances.model.dto.AccountsDTO;
-import com.personal_finances.model.dto.ExpensesDTO;
 import com.personal_finances.repository.ExpensesRepository;
 import com.personal_finances.utils.GetDate;
 import lombok.RequiredArgsConstructor;
@@ -25,83 +20,66 @@ import static com.personal_finances.utils.MessagesExceptions.*;
 @RequiredArgsConstructor
 public class ExpensesService {
 
-    private final ExpensesRepository repository;
-    private final ExpensesMapper mapperExpenses;
+    private final ExpensesRepository expensesRepository;
 
     private final CategoriesService categoriesService;
-    private final CategoriesMapper categoriesMapper;
 
     private final AccountsService accountsService;
-    private final AccountMapper accountMapper;
 
-    public ExpensesDTO save(ExpensesDTO dto){
+    public Expenses save(Expenses expense){
 
-        AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
+        Accounts account = accountsService.findByAccountNumber(expense.getAccount().getAccountNumber());
 
-        Categories category = categoriesMapper.toCategories(
-                categoriesService.findById(dto.getCategory().getId())
-        );
+        categoriesService.findById(expense.getCategory().getId());
 
-        dto.setCategory(category);
-        dto.setAccount(accountMapper.toAccounts(account));
+        expensesRepository.save(expense);
 
-        Expenses expense = mapperExpenses.toExpense(dto);
-        repository.save(expense);
-
-        return mapperExpenses.toDto(expense);
+        return expense;
     }
 
-    public ExpensesDTO update(ExpensesDTO dto){
+    public Expenses update(Expenses expense){
 
-        AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
+        Accounts account = accountsService.findByAccountNumber(expense.getAccount().getAccountNumber());
 
-        Categories category = categoriesMapper.toCategories(
-                categoriesService.findById(dto.getCategory().getId())
-        );
+        categoriesService.findById(expense.getCategory().getId());
 
-        dto.setCategory(category);
-        dto.setAccount(accountMapper.toAccounts(account));
+        expensesRepository.save(expense);
 
-        Expenses expense = mapperExpenses.toExpense(dto);
-        expense.setId(dto.getId());
-
-        repository.save(expense);
-
-        return mapperExpenses.toDto(expense);
+        return expense;
     }
 
-    public ExpensesDTO delete(Long id){
-        ExpensesDTO dto = this.findById(id);
+    public Expenses delete(Long id){
+        Expenses expense = this.findById(id);
 
-        repository.deleteById(id);
+        expensesRepository.deleteById(id);
 
-        return dto;
+        return expense;
     }
 
-    public ExpensesDTO findById(Long id){
-        Optional<Expenses> optionalExpenses = repository.findById(id);
+    public Expenses findById(Long id){
+        Optional<Expenses> optionalExpenses = expensesRepository.findById(id);
 
         if (optionalExpenses.isEmpty()) {
             throw new BusinessException(NO_RECORDS_FOUND);
         }
 
-        return mapperExpenses.optionalToDto(optionalExpenses);
+        return optionalExpenses.get();
     }
 
-    public List<ExpensesDTO> findByCategory(Long id){
-        List<Optional<Expenses>> optionalExpenses = repository.findByCategory(id);
+    public List<Expenses> findByCategory(Long id){
+        List<Optional<Expenses>> optionalExpenses = expensesRepository.findByCategory(id);
 
         if (optionalExpenses.isEmpty()){
             throw new BusinessException(NO_RECORDS_FOUND);
         }
 
         return optionalExpenses.stream()
-                .map(mapperExpenses::optionalToDto)
+                .map(expenses -> expenses.get())
                 .collect(Collectors.toList());
     }
 
-    public List<ExpensesDTO> findAllExpenses(){
-        List<ExpensesDTO> lst = mapperExpenses.toListDTO(repository.findAll());
+    public List<Expenses> findAllExpenses(){
+        List<Expenses> lst =expensesRepository.findAll();
 
         if (lst.isEmpty()){
             throw new BusinessException(NO_RECORDS_FOUND);
@@ -110,13 +88,13 @@ public class ExpensesService {
         return lst;
     }
 
-    public List<ExpensesDTO> findExpensesByDate(Long id, String date){
+    public List<Expenses> findExpensesByDate(Long id, String date){
 
         date = GetDate.extractMonthAndYear(date);
 
-        List<Optional<Expenses>> lst = repository.findExpensesByDate(id, date);
+        List<Optional<Expenses>> lst = expensesRepository.findExpensesByDate(id, date);
 
-        return lst.stream().map(mapperExpenses::optionalToDto).collect(Collectors.toList());
+        return lst.stream().map(expenses -> expenses.get()).collect(Collectors.toList());
     }
 
 }

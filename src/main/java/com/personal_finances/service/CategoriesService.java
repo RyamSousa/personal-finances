@@ -1,9 +1,7 @@
 package com.personal_finances.service;
 
 import com.personal_finances.exceptions.BusinessException;
-import com.personal_finances.mapper.CategoriesMapper;
 import com.personal_finances.model.Categories;
-import com.personal_finances.model.dto.CategoriesDTO;
 import com.personal_finances.repository.CategoriesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,43 +17,41 @@ import static com.personal_finances.utils.MessagesExceptions.*;
 @RequiredArgsConstructor
 public class CategoriesService {
 
-    private final CategoriesRepository repository;
-    private final CategoriesMapper mapperCategory;
+    private final CategoriesRepository categoriesRepository;
 
-    public CategoriesDTO save(CategoriesDTO dto){
-        Optional<Categories> optionalCategory = repository.findByName(dto.getName());
+    public Categories save(Categories category){
+        Optional<Categories> optionalCategory = categoriesRepository.findByName(category.getName());
 
         if (optionalCategory.isPresent()){
             throw new BusinessException(DATA_ALREADY_EXISTS);
         }
 
-        Categories category = mapperCategory.toCategories(dto);
-        repository.save(category);
+        categoriesRepository.save(category);
 
-        return mapperCategory.toDto(category);
+        return category;
     }
 
-    public CategoriesDTO delete(Long id){
-        CategoriesDTO dto = this.findById(id);
+    public Categories delete(Long id){
+        Categories category = this.findById(id);
 
-        repository.deleteById(id);
+        categoriesRepository.deleteById(id);
 
-        return dto;
+        return category;
     }
 
-    public CategoriesDTO findById(Long id){
-        Optional<Categories> optionalCategory = repository.findById(id);
+    public Categories findById(Long id){
+        Optional<Categories> optionalCategory = categoriesRepository.findById(id);
 
         if (optionalCategory.isEmpty()) {
             throw new BusinessException(NO_RECORDS_FOUND);
         }
 
-        return mapperCategory.optionaltoDto(optionalCategory);
+        return optionalCategory.get();
     }
 
-    public List<CategoriesDTO> findAllCategories(){
+    public List<Categories> findAllCategories(){
 
-        List<CategoriesDTO> lst = mapperCategory.toListDTO(repository.findAll());
+        List<Categories> lst = categoriesRepository.findAll();
 
         if (lst.isEmpty()){
             throw new BusinessException(NO_RECORDS_FOUND);

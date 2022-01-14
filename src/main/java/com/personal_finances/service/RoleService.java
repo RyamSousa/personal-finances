@@ -1,9 +1,7 @@
 package com.personal_finances.service;
 
 import com.personal_finances.exceptions.BusinessException;
-import com.personal_finances.mapper.RolesMapper;
 import com.personal_finances.model.Role;
-import com.personal_finances.model.dto.RoleDTO;
 import com.personal_finances.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.personal_finances.utils.MessagesExceptions.DATA_ALREADY_EXISTS;
 import static com.personal_finances.utils.MessagesExceptions.NO_RECORDS_FOUND;
@@ -22,38 +19,36 @@ import static com.personal_finances.utils.MessagesExceptions.NO_RECORDS_FOUND;
 public class RoleService {
 
     private final RoleRepository roleRepository;
-    private final RolesMapper rolesMapper;
 
-    public RoleDTO save(RoleDTO dto){
-        Optional<Role> role = roleRepository.findByName(dto.getName());
+    public Role save(Role role){
+        Optional<Role> optionalRole = roleRepository.findByName(role.getName());
 
-        if(role.isPresent()){
+        if(optionalRole.isPresent()){
             throw new BusinessException(DATA_ALREADY_EXISTS);
         }
-        Role save = roleRepository.save(rolesMapper.toRole(dto));
+        Role save = roleRepository.save(role);
 
-        return rolesMapper.toDto(save);
+        return save;
     }
 
-    public RoleDTO delete(String name){
-        RoleDTO role = this.findByName(name);
+    public Role delete(String name){
+        Role role = this.findByName(name);
 
-        roleRepository.delete(rolesMapper.toRole(role));
+        roleRepository.delete(role);
 
         return role;
     }
 
-    public RoleDTO findByName(String name){
+    public Role findByName(String name){
         Optional<Role> role = roleRepository.findByName(name);
 
         if (role.isEmpty()){
             throw new BusinessException(NO_RECORDS_FOUND);
         }
-        return rolesMapper.optionalToDto(role);
+        return role.get();
     }
 
-    public List<RoleDTO> findAllRoles(){
-        return roleRepository.findAll()
-                .stream().map(rolesMapper::toDto).collect(Collectors.toList());
+    public List<Role> findAllRoles(){
+        return roleRepository.findAll();
     }
 }

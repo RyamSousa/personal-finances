@@ -1,13 +1,9 @@
 package com.personal_finances.service;
 
 import com.personal_finances.exceptions.BusinessException;
-import com.personal_finances.mapper.AccountMapper;
-import com.personal_finances.mapper.CategoriesMapper;
-import com.personal_finances.mapper.IncomesMapper;
+import com.personal_finances.model.Accounts;
 import com.personal_finances.model.Categories;
 import com.personal_finances.model.Incomes;
-import com.personal_finances.model.dto.AccountsDTO;
-import com.personal_finances.model.dto.IncomesDTO;
 import com.personal_finances.repository.IncomesRepository;
 import com.personal_finances.utils.GetDate;
 import lombok.RequiredArgsConstructor;
@@ -25,84 +21,67 @@ import static com.personal_finances.utils.MessagesExceptions.*;
 @RequiredArgsConstructor
 public class IncomesService {
 
-    private final IncomesRepository repository;
-    private final IncomesMapper mapperIncome;
+    private final IncomesRepository incomesRepository;
 
     private final CategoriesService categoriesService;
-    private final CategoriesMapper categoriesMapper;
 
     private final AccountsService accountsService;
-    private final AccountMapper accountMapper;
 
-    public IncomesDTO save(IncomesDTO dto){
+    public Incomes save(Incomes income){
 
-        AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
+        Accounts account = accountsService.findByAccountNumber(income.getAccount().getAccountNumber());
 
-        Categories category = categoriesMapper.toCategories(
-                categoriesService.findById(dto.getCategory().getId())
-        );
+        Categories category = categoriesService.findById(income.getCategory().getId());
 
-        dto.setCategory(category);
-        dto.setAccount(accountMapper.toAccounts(account));
+        incomesRepository.save(income);
 
-        Incomes income = mapperIncome.toRevenue(dto);
-        repository.save(income);
-
-        return mapperIncome.toDto(income);
+        return income;
     }
 
-    public IncomesDTO update(IncomesDTO dto){
+    public Incomes update(Incomes income){
 
-        AccountsDTO account = accountsService.findByAccountNumber(dto.getAccount().getAccountNumber());
+        Accounts account = accountsService.findByAccountNumber(income.getAccount().getAccountNumber());
 
-        Categories category = categoriesMapper.toCategories(
-                categoriesService.findById(dto.getCategory().getId())
-        );
+        Categories category = categoriesService.findById(income.getCategory().getId());
 
-        dto.setCategory(category);
-        dto.setAccount(accountMapper.toAccounts(account));
+        incomesRepository.save(income);
 
-        Incomes income = mapperIncome.toRevenue(dto);
-        income.setId(dto.getId());
-
-        repository.save(income);
-
-        return mapperIncome.toDto(income);
+        return income;
     }
 
-    public IncomesDTO delete(Long id){
-        IncomesDTO dto = this.findById(id);
+    public Incomes delete(Long id){
+        Incomes income = this.findById(id);
 
-        repository.deleteById(id);
+        incomesRepository.deleteById(id);
 
-        return dto;
+        return income;
     }
 
-    public IncomesDTO findById(Long id){
-        Optional<Incomes> optionalIncome = repository.findById(id);
+    public Incomes findById(Long id){
+        Optional<Incomes> optionalIncome = incomesRepository.findById(id);
 
         if (optionalIncome.isEmpty()) {
             throw new BusinessException(NO_RECORDS_FOUND);
         }
 
-        return mapperIncome.optionalToDto(optionalIncome);
+        return optionalIncome.get();
     }
 
-    public List<IncomesDTO> findByCategory(Long id){
-        List<Optional<Incomes>> optionalIncomes = repository.findByCategory(id);
+    public List<Incomes> findByCategory(Long id){
+        List<Optional<Incomes>> optionalIncomes = incomesRepository.findByCategory(id);
 
         if (optionalIncomes.isEmpty()){
             throw new BusinessException(NO_RECORDS_FOUND);
         }
 
         return optionalIncomes.stream()
-                .map(mapperIncome::optionalToDto)
+                .map(incomes -> incomes.get())
                 .collect(Collectors.toList());
     }
 
-    public List<IncomesDTO> findAllIncomes(){
+    public List<Incomes> findAllIncomes(){
 
-        List<IncomesDTO> lst = mapperIncome.toListDTO(repository.findAll());
+        List<Incomes> lst = incomesRepository.findAll();
 
         if (lst.isEmpty()){
             throw new BusinessException(NO_RECORDS_FOUND);
@@ -111,13 +90,13 @@ public class IncomesService {
         return lst;
     }
 
-    public List<IncomesDTO> findIncomesByDate(Long id, String date){
+    public List<Incomes> findIncomesByDate(Long id, String date){
 
         date = GetDate.extractMonthAndYear(date);
 
-        List<Optional<Incomes>> lst = repository.findIncomesByDate(id, date);
+        List<Optional<Incomes>> lst = incomesRepository.findIncomesByDate(id, date);
 
-        return lst.stream().map(mapperIncome::optionalToDto).collect(Collectors.toList());
+        return lst.stream().map(incomes -> incomes.get()).collect(Collectors.toList());
     }
 
 }
